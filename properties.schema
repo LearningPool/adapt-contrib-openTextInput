@@ -5,19 +5,19 @@
   "$ref": "http://localhost/plugins/content/component/model.schema",
   "properties":{
     "placeholder": {
-    "type":"string",
-    "required":false
+      "type":"string",
+      "required":false
     },
     "_allowedCharacters": {
-    "type":"integer",
-    "required":true
+      "type":"integer",
+      "required":true
     },
     "remainingCharactersText": {
       "type":"string",
       "required":true
     },
     "characterCountText": {
-      "type":"integer",
+      "type":"string",
       "required":true
     },
     "_numberOfRows": {
@@ -49,35 +49,34 @@
       "required":true
     },
     "savedMessage": {
-    "type":"string",
-    "required":true
+      "type":"string",
+      "required":true
     },
     "submittedMessage": {
-    "type":"string",
-    "required":true
+      "type":"string",
+      "required":true
     },
     "_buttons": {
       "type":"object",
-        "required":true,
-        "properties":{
-          "save": {
-            "type":"string"
-          },
-          "submit": {
-            "type":"string"
-          },
-          "showModelAnswer": {
-            "type":"string"
-          },
-          "showUserAnswer": {
-            "type":"string"
-          },
-          "clear": {
-            "type":"string"
-          }
+      "required":true,
+      "properties":{
+        "save": {
+          "type":"string"
+        },
+        "submit": {
+          "type":"string"
+        },
+        "showModelAnswer": {
+          "type":"string"
+        },
+        "showUserAnswer": {
+          "type":"string"
+        },
+        "clear": {
+          "type":"string"
         }
+      }
     }
-
   }
 }
 
