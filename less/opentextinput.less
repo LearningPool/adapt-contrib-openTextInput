@@ -1,87 +1,26 @@
- /* Opera/IE 8+ */
- .openTextInput-component {
-     .openTextInput-item {
-         background-color: @primary-color;
-         padding: @item-padding;
-         position:relative;
-         margin-bottom:2px;
-     }
-     label {
-         background-color: transparent;
-         line-height: 32px;
-         padding: 0px;
-         float: left;
-         text-align: center;
-         cursor: default;
-         color: @inverted-foreground-color;
-     }
-     .openTextInput-item-prefix {
-         width:20%;
-     }
-     .openTextInput-item-textbox {
-         font-family:'Open Sans', sans-serif;
-         font-weight: 300;
-         -webkit-box-sizing: border-box;
-         /* Safari/Chrome, other WebKit */
-         -moz-box-sizing: border-box;
-         /* Firefox, other Gecko */
-         box-sizing: border-box;
-         padding: 5px;
-         width: 100%;
-         float: left;
-         min-height: 50px;
-         resize: none;
-     }
-     .openTextInput-item-suffix {
-         width:10%;
-     }
-     .openTextInput-modelanswer {
-         display: none;
-         width: 48%;
-         min-height: 50px;
-         resize: none;
-         border-color: rgb(169, 169, 169);
-         -webkit-appearance: textarea;
-         background-color: rgb(235, 235, 228);
-         border: 1px solid;
-         border-image-source: initial;
-         border-image-slice: initial;
-         border-image-width: initial;
-         border-image-outset: initial;
-         border-image-repeat: initial;
-         -webkit-rtl-ordering: logical;
-         -webkit-user-select: text;
-         flex-direction: column;
-         resize: auto;
-         cursor: auto;
-         padding: 5px;
-         white-space: pre-wrap;
-         word-wrap: break-word;
-         float: left;
-     }
-    
-     .openTextInput-widget {
-             .openTextInput-item {
-                 background-color: @item-disabled-color;
-             }
-         }
-     }
-     .openTextInput-item-state {
-         background: none;
-         position: absolute;
-         right: (@icon-size/2);
-         width: @icon-size;
-         height: @icon-size;
-         top: 50%;
-         margin-top: -(@icon-size/2);
-         z-index: 0;
-     }
- }
- .no-touch {
-     .button {
-         &:hover {
-             color: @button-text-hover-color;
-             background-color: @button-hover-color;
-         }
-     }
- }
+/* Opera/IE 8+ */
+
+.openTextInput-component {
+    .openTextInput-answer-container {
+        border: 1px solid #ccc;
+    }
+    .openTextInput-item-textbox {
+        width: 98%;
+        padding: 1%;
+        margin: 0;
+        border: none;
+        resize: none;
+        display: block;
+    }
+    .openTextInput-action-button {
+        width: 100%;
+    }
+    .buttons {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        @media all and (max-width: (@device-width-medium - 1px)) {
+            width: 100%;
+        }
+    }
+}

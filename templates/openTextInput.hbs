@@ -3,41 +3,32 @@
     {{> component this}}
     <div class="component-widget openTextInput-widget">
     <div class="openTextInput-count-characters">
-    <span class="openTextInput-count-text">
-        {{#if _allowedCharacters}}
-            {{remainingCharactersText}}
-        {{else}}
-            {{characterCountText}}
-        {{/if}}
-    </span>
-    <span class="openTextInput-count-amount">
-        
-    </span>
+        <span class="openTextInput-count-text">
+            {{#if _allowedCharacters}}
+                {{remainingCharactersText}}
+            {{else}}
+                {{characterCountText}}
+            {{/if}}
+        </span>
+        <span class="openTextInput-count-amount">
+        </span>
     </div>
 
     <div class="openTextInput-answer-container">
-      <textarea class="openTextInput-item-textbox openTextInput-useranswer"
-    rows = {{{_numberOfRows}}}
-    placeholder="{{{placeholder}}}" 
-    maxlength="{{{allowedCharacters}}}">
-        {{#if _userAnswer}}
-            {{_userAnswer}}
-        {{/if}}
-    </textarea>
-         <span class="openTextInput-modelanswer">{{{modelAnswer}}}</span>
+        <textarea class="openTextInput-item-textbox"
+            rows={{_numberOfRows}} placeholder="{{placeholder}}" 
+            maxlength="{{_allowedCharacters}}">{{_userAnswer}}</textarea>
     </div>
         <div class="buttons">
-            <button href="#" class="openTextInput-save-button">
-                <span>  
-                {{#unless _buttons.save}} Save {{/unless}}
-                    {{{_buttons.save}}}
+            <button class="openTextInput-save-button" disabled="true">
+                {{_buttons.save}}
             </button>    
-            <a href="#" class="openTextInput-clear-button" value="Clear">
-                <span>  
-                {{#unless _buttons.clear}} Clear {{/unless}}
-                    {{{_buttons.clear}}}
-                </span>
-            </a>  
+            <button class="openTextInput-clear-button" {{#unless _userAnswer}}disabled="true"{{/unless}}>
+                {{_buttons.clear}}
+            </button>  
+            <button class="openTextInput-action-button" {{#unless _userAnswer}}disabled="true"{{/unless}}>
+                {{_buttons.submit}}
+            </button>
         </div>
     </div>
 </div>

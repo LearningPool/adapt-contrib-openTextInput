@@ -9,127 +9,86 @@
 
 define(function(require) {
 
-    var ComponentView = require('coreViews/questionView');
+    var ComponentView = require('coreViews/componentView');
     var Adapt = require('coreJS/adapt');
 
-    // This should go in the view
-    //var countCharacter = 0;
-
-
     var OpenTextInput = ComponentView.extend({
-
         events: {
-            /*            'click .openTextInput-save-button': 'onSaveClicked',
-                        'click .openTextInput-submit-button': 'onSubmitClicked',
-                        'click .openTextInput-model-button': 'onModelAnswerClicked',
-                        'click .openTextInput-clear-button': 'onClearClicked',
-                        'click .openTextInput-user-button': 'onUserAnswerClicked',*/
+            'click .openTextInput-save-button': 'onSaveClicked',
+            'click .openTextInput-clear-button': 'onClearClicked',
+            'click .openTextInput-action-button': 'onActionClicked',
             'keyup .openTextInput-item-textbox': 'onKeyUpTextarea'
         },
-
         preRender: function() {
-            // Read the last saved answer and paste it into the textarea
+            this.listenTo(this.model, 'change:_isSaved', this.onSaveChanged);
+            this.listenTo(this.model, 'change:_userAnswer', this.onUserAnswerChanged);
+            Adapt.router.set('_canNavigate', false, {pluginName:'_openTextInput'});
+            this.listenToOnce(Adapt, 'navigation:backButton', this.unsavedChangesNotification);
             if (!this.model.get('_userAnswer')) {
                 var userAnswer = this.getUserAnswer();
                 if (userAnswer) {
                     this.model.set('_userAnswer', userAnswer);
-                    this.countCharacter();
                 }
             }
         },
+         unsavedChangesNotification: function() {
+                 var promptObject = {
+                     title: this.model.get('unsavedChangesNotificationTitle'),
+                     body: this.model.get('unsavedChangesNotificationBody'),
+                     _prompts: [{
+                         promptText: 'Yes',
+                         _callbackEvent: '_openTextInput:save',
+                     }, {
+                         promptText: 'No',
+                         _callbackEvent: '_openTextInput:doNotSave'
+                     }],
+                     _showIcon: true
+                 };
+                 Adapt.once('_openTextInput:save', function() {
+                     this.storeUserAnswer();
+                      Adapt.router.set('_canNavigate', true, {pluginName:'_openTextInput'});
+                      Adapt.trigger('navigation:backButton');
+                 }, this);
 
+                 Adapt.once('_openTextInput:doNotSave', function() {
+                   Adapt.router.set('_canNavigate', true, {pluginName:'_openTextInput'});
+                   Adapt.trigger('navigation:backButton');
+                 }, this);
+
+
+                 Adapt.trigger('notify:prompt', promptObject);
+         },
         postRender: function() {
             //set component to ready
+            this.$textbox = this.$('.openTextInput-item-textbox');
+            this.countCharacter();
             this.setReadyStatus();
-
-            if ((this.model.get('_layout') == 'right') || (this.model.get('_layout') == 'left')) {
-                this.$('.opentextinput-useranswer').css('width', '100%');
-                this.$('.opentextinput-modelanswer').css('width', '100%');
-                this.$('.opentextinput-modelanswer').css('display', 'none');
-                this.$('.model').css('visibility', 'visible');
-            } else {
-                this.$('.model').css('visibility', 'hidden');
-
+            if (this.model.get('_isComplete')) {
+                this.disableButtons();
+                this.disableTextarea();
+                if (!this.model.get('modelAnswer')) {
+                    this.$('.openTextInput-action-button')
+                        .prop('disabled', true);
+                } else {
+                    this.showUserAnswer();
+                }
             }
-
         },
-         getUserAnswer: function() {
+        getUserAnswer: function() {
             var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
             var userAnswer = '';
 
-            if (this.supports_html5_storage()) {
+            if (this.supportsHtml5Storage()) {
                 userAnswer = localStorage.getItem(identifier);
-                if(userAnswer) {
+                if (userAnswer) {
                     return userAnswer;
                 }
             } else {
                 console.warn('No local storage available');
             }
             return false;
-        }
-        
-
-
-        /*onKeyUpTextarea: function() {
-            this.countCharacter();
         },
-
-        countCharacter: function() {
-            var charLengthOfTextarea = this.$('.opentextinput-item-textbox').val().length;
-            var allowedCharacters = this.model.get('allowedCharacters');
-            if (allowedCharacters != null) {
-                var charactersLeft = allowedCharacters - charLengthOfTextarea;
-                this.$('.countCharacters').html('Permitted number of characters left: ' + charactersLeft);
-            } else {
-                this.$('.countCharacters').html('Number of Characters: ' + charLengthOfTextarea);
-            }
-        },*/
-
-        /*calculateWidths: function() {
-
-    if (this.model.get('_isSubmitted') && this.model.get('modelAnswer') != '') {
-
-        if (Adapt.device.screenSize != 'large') {
-            this.$('.opentextinput-useranswer').css('width', '100%');
-            this.$('.opentextinput-modelanswer').css('width', '100%');
-            this.$('.opentextinput-modelanswer').css('display', 'none');
-            this.$('.model').css('visibility', 'visible');
-        } else {
-            if ((this.model.get('_layout') == 'full')) {
-                console.log('i am here in full large');
-                this.$('.opentextinput-useranswer').css('width', '48%');
-                this.$('.opentextinput-modelanswer').css('width', '48%');
-                this.$('.opentextinput-modelanswer').css('display', 'inline-block');
-
-                this.$('.opentextinput-useranswer').css('display', 'inline-block');
-                this.$('.model').css('visibility', 'hidden');
-            }
-        }
-    }
-
-},
-*/
-        /*,
-
-        setDeviceSize: function() {
-            if (Adapt.device.screenSize === 'large') {
-                this.model.set('_isDesktop', true);
-            } else {
-                this.model.set('_isDesktop', false)
-            }
-        },
-
-        resizeControl: function() {
-            this.setDeviceSize();
-            this.calculateWidths();
-        },
-        setupDefaultSettings: function() {
-            // initialize saved status
-            this.model.set('_isSaved', false);
-
-            QuestionView.prototype.setupDefaultSettings.apply(this);
-        },
-        supports_html5_storage: function() {
+        supportsHtml5Storage: function() {
             // check for html5 local storage support
             try {
                 return 'localStorage' in window && window['localStorage'] !== null;
@@ -137,154 +96,148 @@ define(function(require) {
                 return false;
             }
         },
-        canSubmit: function() {
-            // function copied from textInput component
-            var canSubmit = true;
-            if ($('.opentextinput-item-textbox').val() == '') {
-                canSubmit = false;
-            }
-            return canSubmit;
-        },
-        forceFixedPositionFakeScroll: function() {
-            // function copied from textInput component
-            if (Modernizr.touch) {
-                _.defer(function() {
-                    window.scrollTo(document.body.scrollLeft, document.body.scrollTop);
-                });
-            }
-        },
-        storeUserAnswer: function() {
-            // store user answer from textarea to localstorage
-            var userAnswer = this.$('.opentextinput-item-textbox').val();
-            // use unique identifier to avoid collisions with other components
-            var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
-
-            if (this.supports_html5_storage()) {
-                localStorage.setItem(identifier, userAnswer);
-                this.model.set('_isSaved', true);
+        countCharacter: function() {
+            var charLengthOfTextarea = this.$textbox.val().length;
+            var allowedCharacters = this.model.get('_allowedCharacters');
+            if (allowedCharacters != null) {
+                var charactersLeft = allowedCharacters - charLengthOfTextarea;
+                this.$('.openTextInput-count-amount').html(charactersLeft);
             } else {
-                console.warn('No local storage available');
+                this.$('.openTextInput-count-amount').html(charLengthOfTextarea);
+            }
+        },
+        onKeyUpTextarea: function() {
+          console.log('onKeyUp');
+            this.model.set('_isSaved', false);
+            this.onUserAnswerChanged(null, this.$textbox.val());
+            this.limitCharacters();
+            this.countCharacter();
+        },
+        limitCharacters: function() {
+            var allowedCharacters = this.model.get('_allowedCharacters');
+            if (allowedCharacters != null && this.$textbox.val().length > allowedCharacters) {
+                var substringValue = this.$textbox.val().substring(0, allowedCharacters);
+                this.$textbox.val(substringValue);
             }
         },
         onSaveClicked: function(event) {
             event.preventDefault();
-
             this.storeUserAnswer();
+            this.notifyUserAnswerIsSaved();
+        },
+        storeUserAnswer: function() {
+            // use unique identifier to avoid collisions with other components
+            var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
 
+            if (this.supportsHtml5Storage()) {
+                localStorage.setItem(identifier, this.$textbox.val());
+            } else {
+                console.warn('No local storage available');
+            }
+            this.model.set('_userAnswer', this.$textbox.val());
+            this.model.set('_isSaved', true);
+        },
+        notifyUserAnswerIsSaved: function() {
             var pushObject = {
                 title: '',
                 body: this.model.get('savedMessage'),
                 _timeout: 2000,
-                _callbackEvent: 'pageLevelProgress:stayOnPage'
+                _callbackEvent: '_openTextInput'
             };
-
-
             Adapt.trigger('notify:push', pushObject);
         },
-
+        onSaveChanged: function(model, changedValue) {
+            this.$('.openTextInput-save-button').prop('disabled', changedValue);
+        },
         onClearClicked: function(event) {
             event.preventDefault();
 
             var promptObject = {
-                title: 'Clear Text',
-                body: 'Do you really want to delete your written text?',
+                title: this.model.get('clearNotificationTitle'),
+                body: this.model.get('clearNotificationBody'),
                 _prompts: [{
                     promptText: 'Yes',
-                    _callbackEvent: 'clickEvent:clearText',
+                    _callbackEvent: '_openTextInput:clearText',
                 }, {
                     promptText: 'No',
-                    _callbackEvent: 'pageLevelProgress:stayOnPage'
+                    _callbackEvent: '_openTextInput:keepText'
                 }],
                 _showIcon: true
             };
 
-
-            Adapt.on('clickEvent:clearText', function() {
-                // Error: Undefined is not a function
+            Adapt.once('_openTextInput:clearText', function() {
                 this.clearTextarea();
+                this.onUserAnswerChanged(null, this.$textbox.val());
+                this.countCharacter();
             }, this);
-
             Adapt.trigger('notify:prompt', promptObject);
-
         },
-
         clearTextarea: function(event) {
-            this.$('.opentextinput-item-textbox').val('');
-            this.storeUserAnswer();
-
+            this.$textbox.val('');
+            this.model.set('_isSaved', false);
         },
-
-        onSubmitClicked: function(event) {
-            event.preventDefault();
-
-            if (!this.canSubmit()) return;
-
-            Adapt.tabHistory = $(event.currentTarget).parent('.inner');
-
-            this.model.set({
-                _isEnabled: false,
-                _isSubmitted: true,
-            });
-            this.$('.component-widget').addClass('submitted user');
-
-            var userAnswer = this.$('.opentextinput-item-textbox').val();
-            this.model.set('_userAnswer', userAnswer);
-
-            this.storeUserAnswer();
-
-            if (this.model.get('modelAnswer') == '') {
-                this.$('.button.model').addClass('hide-model');
-                this.$('.button.user').addClass('hide-user');
+        onUserAnswerChanged: function(model, changedValue) {
+            if (changedValue) {
+                this.$('.openTextInput-clear-button, .openTextInput-action-button')
+                    .prop('disabled', false);
+            } else {
+                this.$('.openTextInput-clear-button, .openTextInput-action-button')
+                    .prop('disabled', true);
             }
+        },
+        onActionClicked: function(event) {
+            if (this.model.get('_isComplete')) {
+                if (this.model.get('_buttonState') == 'model') {
+                    this.showUserAnswer();
+                } else {
+                    this.showModelAnswer();
+                }
+            } else {
+                this.submitAnswer();
+            }
+        },
+        submitAnswer: function() {
+            this.storeUserAnswer();
+            this.disableButtons();
+            this.disableTextarea();
+            if (!this.model.get('modelAnswer')) {
+                this.$('.openTextInput-action-button')
+                    .prop('disabled', true);
+            } else {
+                this.showUserAnswer();
+            }
+            this.model.set('_isComplete', true);
 
             var pushObject = {
                 title: '',
                 body: this.model.get('submittedMessage'),
                 _timeout: 2000,
-                _callbackEvent: 'pageLevelProgress:stayOnPage'
+                _callbackEvent: '_openTextInput:submitted'
             };
 
-            this.calculateWidths();
-
             Adapt.trigger('notify:push', pushObject);
-
         },
-        onEnabledChanged: function() {
-            this.$('.opentextinput-item-textbox').prop('disabled', !this.model.get('_isEnabled'));
+        disableTextarea: function() {
+            this.$textbox.prop('disabled', true);
         },
-        onModelAnswerShown: function() {
-            this.$('.opentextinput-item-textbox').val(this.model.get('modelAnswer'));
-
-            if (this.model.get('_layout') === 'right' || this.model.get('_layout') === 'left' || (Adapt.device.screenSize != 'large')) {
-                this.$('.opentextinput-useranswer').css('display', 'none');
-                this.$('.opentextinput-modelanswer').css('display', 'inline-block');
-                this.$('.user').css('visibility', 'visible');
-            }
-
-
+        disableButtons: function() {
+            this.$('.openTextInput-clear-button, .openTextInput-save-button')
+                .prop('disabled', true);
         },
-        onUserAnswerShown: function() {
-            this.$('.opentextinput-item-textbox').val(this.getUserAnswer());
-
-            if (this.model.get('_layout') === 'right' || this.model.get('_layout') === 'left' || (Adapt.device.screenSize != 'large')) {
-                this.$('.opentextinput-useranswer').css('display', 'inline-block');
-                this.$('.opentextinput-modelanswer').css('display', 'none');
-                this.$('.model').css('visibility', 'visible');
-            }
+        updateActionButton: function(buttonText) {
+            this.$('.openTextInput-action-button')
+                .html(buttonText);
         },
-       
-        onComplete: function(parameters) {
-            this.model.set({
-                _isComplete: true,
-                _isEnabled: false,
-            });
-            this.$('.component-widget').addClass('disabled');
-            // this.showMarking();
-            this.showUserAnswer();
-            Adapt.trigger('questionView:complete', this);
+        showModelAnswer: function() {
+            this.model.set('_buttonState', 'model');
+            this.updateActionButton(this.model.get('_buttons').showUserAnswer);
+            this.$textbox.val(this.model.get('modelAnswer'));
         },
-
-        markQuestion: function() {}*/
+        showUserAnswer: function() {
+            this.model.set('_buttonState', 'user');
+            this.updateActionButton(this.model.get('_buttons').showModelAnswer);
+            this.$textbox.val(this.model.get('_userAnswer'));
+        }
     });
 
     Adapt.register('openTextInput', OpenTextInput);
