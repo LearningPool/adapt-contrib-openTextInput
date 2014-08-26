@@ -13,5 +13,7 @@
     "adapt-plugin",
     "adapt-component"
   ],
+  "component": "openTextInput",
+  "displayName": "Open Text Input",
   "license": "GPLv3"
 }
