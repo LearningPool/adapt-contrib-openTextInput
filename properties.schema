@@ -1,0 +1,82 @@
+{
+  "type":"object",
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "http://jsonschema.net",
+  "$ref": "http://localhost/plugins/content/component/model.schema",
+  "properties":{
+    "placeholder": {
+      "type":"string",
+      "required":false
+    },
+    "_allowedCharacters": {
+      "type":"integer",
+      "required":true
+    },
+    "remainingCharactersText": {
+      "type":"string",
+      "required":true
+    },
+    "characterCountText": {
+      "type":"string",
+      "required":true
+    },
+    "_numberOfRows": {
+      "type":"integer",
+      "required":true
+    },
+    "_isAllowedToNavigate": {
+      "type":"boolean",
+      "required":true
+    },
+    "clearNotificationTitle": {
+      "type":"string",
+      "required":true
+    },
+    "clearNotificationBody": {
+      "type":"string",
+      "required":true
+    },
+    "unsavedChangesNotificationTitle": {
+      "type":"string",
+      "required":true
+    },
+    "unsavedChangesNotificationBody": {
+      "type":"string",
+      "required":true
+    },
+    "modelAnswer": {
+      "type":"string",
+      "required":true
+    },
+    "savedMessage": {
+      "type":"string",
+      "required":true
+    },
+    "submittedMessage": {
+      "type":"string",
+      "required":true
+    },
+    "_buttons": {
+      "type":"object",
+      "required":true,
+      "properties":{
+        "save": {
+          "type":"string"
+        },
+        "submit": {
+          "type":"string"
+        },
+        "showModelAnswer": {
+          "type":"string"
+        },
+        "showUserAnswer": {
+          "type":"string"
+        },
+        "clear": {
+          "type":"string"
+        }
+      }
+    }
+  }
+}
+
