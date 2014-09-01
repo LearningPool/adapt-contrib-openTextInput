@@ -23,7 +23,7 @@ define(function(require) {
             this.listenTo(this.model, 'change:_isSaved', this.onSaveChanged);
             this.listenTo(this.model, 'change:_userAnswer', this.onUserAnswerChanged);
             Adapt.router.set('_canNavigate', false, {pluginName:'_openTextInput'});
-            this.listenToOnce(Adapt, 'navigation:backButton', this.unsavedChangesNotification);
+            this.listenToOnce(Adapt, 'navigation:backButton', this.checkForChanges);
             if (!this.model.get('_userAnswer')) {
                 var userAnswer = this.getUserAnswer();
                 if (userAnswer) {
@@ -31,6 +31,15 @@ define(function(require) {
                 }
             }
         },
+         checkForChanges: function() {
+            if (this.model.get("_userAnswer") === this.$textbox.val()) {
+                Adapt.router.set('_canNavigate', true, {pluginName:'_openTextInput'});
+                Adapt.trigger('navigation:backButton');
+            }
+            else {
+                this.unsavedChangesNotification();
+            }
+         },
          unsavedChangesNotification: function() {
                  var promptObject = {
                      title: this.model.get('unsavedChangesNotificationTitle'),
