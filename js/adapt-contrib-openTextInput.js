@@ -23,7 +23,7 @@ define(function(require) {
             this.listenTo(this.model, 'change:_isSaved', this.onSaveChanged);
             this.listenTo(this.model, 'change:_userAnswer', this.onUserAnswerChanged);
             Adapt.router.set('_canNavigate', false, {pluginName:'_openTextInput'});
-            this.listenToOnce(Adapt, 'navigation:backButton', this.unsavedChangesNotification);
+            this.listenToOnce(Adapt, 'navigation:backButton', this.checkForChanges);
             if (!this.model.get('_userAnswer')) {
                 var userAnswer = this.getUserAnswer();
                 if (userAnswer) {
@@ -31,6 +31,15 @@ define(function(require) {
                 }
             }
         },
+         checkForChanges: function() {
+            if (this.model.get("_userAnswer") === this.$textbox.val()) {
+                Adapt.router.set('_canNavigate', true, {pluginName:'_openTextInput'});
+                Adapt.trigger('navigation:backButton');
+            }
+            else {
+                this.unsavedChangesNotification();
+            }
+         },
          unsavedChangesNotification: function() {
                  var promptObject = {
                      title: this.model.get('unsavedChangesNotificationTitle'),
@@ -231,7 +240,9 @@ define(function(require) {
         showModelAnswer: function() {
             this.model.set('_buttonState', 'model');
             this.updateActionButton(this.model.get('_buttons').showUserAnswer);
-            this.$textbox.val(this.model.get('modelAnswer'));
+            var modelAnswer = this.model.get('modelAnswer');
+            modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n"); 
+            this.$textbox.val(modelAnswer);
         },
         showUserAnswer: function() {
             this.model.set('_buttonState', 'user');
