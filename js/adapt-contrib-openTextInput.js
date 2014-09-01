@@ -231,7 +231,9 @@ define(function(require) {
         showModelAnswer: function() {
             this.model.set('_buttonState', 'model');
             this.updateActionButton(this.model.get('_buttons').showUserAnswer);
-            this.$textbox.val(this.model.get('modelAnswer'));
+            var modelAnswer = this.model.get('modelAnswer');
+            modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n"); 
+            this.$textbox.val(modelAnswer);
         },
         showUserAnswer: function() {
             this.model.set('_buttonState', 'user');
