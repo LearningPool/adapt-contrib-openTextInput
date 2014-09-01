@@ -1,6 +1,6 @@
 {
   "name": "adapt-contrib-openTextInput",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/lc-petranussdorfer/adapt-contrib-openTextInput",
   "authors": [
     "Thomas Eitler <thomas.eitler@learnchamp.com>",
@@ -13,5 +13,7 @@
     "adapt-plugin",
     "adapt-component"
   ],
+  "component": "openTextInput",
+  "displayName": "Open Text Input",
   "license": "GPLv3"
 }
