@@ -6,76 +6,158 @@
   "properties":{
     "placeholder": {
       "type":"string",
-      "required":false
+      "required":false,
+      "default": "",
+      "title": "Placeholder",
+      "inputType": "Text",
+      "validators": [],
+      "help": "This is the placeholder text which will be displayed inside the textarea"
     },
     "_allowedCharacters": {
-      "type":"integer",
-      "required":true
+      "type":"number",
+      "required":true,
+      "default":500,
+      "title": "Allowed characters",
+      "inputType":"Number",
+      "validators": ["required", "number"],
+      "help": "The maximum number of characters that the user may enter"
     },
     "remainingCharactersText": {
       "type":"string",
-      "required":true
+      "required":true,
+      "default": "",
+      "title": "Characters remaining",
+      "inputType": "Text",
+      "validators": ["required"],
+      "help": "Label for the count of remaining characters"
     },
     "characterCountText": {
       "type":"string",
-      "required":true
+      "required":true,
+      "default": "",
+      "title": "Character count",
+      "inputType": "Text",
+      "validators": ["required"],
+      "help": "Label for the count of characters entered"
     },
     "_numberOfRows": {
       "type":"integer",
-      "required":true
-    },
-    "_isAllowedToNavigate": {
-      "type":"boolean",
-      "required":true
+      "required":true,
+      "default": 3,
+      "title": "Number of rows",
+      "inputType":"Number",
+      "validators": ["required", "number"],
+      "help": "The number textarea rows"
     },
     "clearNotificationTitle": {
       "type":"string",
       "required":true
+      "default": "",
+      "title": "Cleared notification title text",
+      "inputType": "Text",
+      "validators": ["required"],
+      "help": "This is title text which will be displayed when the clear button is clicked"
     },
     "clearNotificationBody": {
       "type":"string",
-      "required":true
+      "required":true,
+      "default": "",
+      "title": "Cleared notification body text",
+      "inputType": "Text",
+      "validators": ["required"],
+      "help": "This is the body text which will be displayed when the clear button is clicked"
     },
     "unsavedChangesNotificationTitle": {
       "type":"string",
-      "required":true
+      "required":true,
+      "default": "",
+      "title": "Unsaved changes notification title text",
+      "inputType": "Text",
+      "validators": ["required"],
+      "help": "This is the title text which will be displayed when user has unsaved changes"
     },
     "unsavedChangesNotificationBody": {
       "type":"string",
-      "required":true
+      "required":true,
+      "default": "",
+      "title": "Unsaved changes notification body text",
+      "inputType": "Text",
+      "validators": ["required"],
+      "help": "This is the body text which will be displayed when user has unsaved changes"
     },
     "modelAnswer": {
       "type":"string",
-      "required":true
+      "required":true,
+      "default": "",
+      "title": "Model answer",
+      "inputType": "Text",
+      "validators": ["required"],
+      "help": "This is the model answer which will be displayed when the model answer button is clicked"
     },
     "savedMessage": {
       "type":"string",
-      "required":true
+      "required":true,
+      "default": "",
+      "title": "Saved message",
+      "inputType": "Text",
+      "validators": ["required"],
+      "help": "This is the message displayed to the user when the text is saved"
     },
     "submittedMessage": {
       "type":"string",
-      "required":true
+      "required":true,
+      "default": "",
+      "title": "Submitted message",
+      "inputType": "Text",
+      "validators": ["required"],
+      "help": "This is the message displayed to the user when the text is submitted"
     },
     "_buttons": {
       "type":"object",
-      "required":true,
+      "title": "Buttons",
+      "required": false,
       "properties":{
         "save": {
-          "type":"string"
+          "type":"string",
+          "required": false,
+          "default": "",
+          "inputType": "QuestionButton",
+          "validators": [],
+          "help": "Button label text for the save button"
         },
         "submit": {
-          "type":"string"
+          "type":"string",
+          "required": false,
+          "default": "",
+          "inputType": "QuestionButton",
+          "validators": [],
+          "help": "Button label text for the submit button"
         },
         "showModelAnswer": {
-          "type":"string"
+          "type":"string",
+          "required": false,
+          "default": "",
+          "inputType": "QuestionButton",
+          "validators": [],
+          "help": "Button label text to show the model answer"
         },
         "showUserAnswer": {
-          "type":"string"
+          "type":"string",
+          "required": false,
+          "default": "",
+          "inputType": "QuestionButton",
+          "validators": [],
+          "help": "Button label text to show the user's answer"
         },
         "clear": {
-          "type":"string"
-        }
-      }
+          "type":"string",
+          "required": false,
+          "default": "",
+          "inputType": "QuestionButton",
+          "validators": [],
+          "help": "Button label text for the clear button"
+        } 
+      }      
     }
   }
 }

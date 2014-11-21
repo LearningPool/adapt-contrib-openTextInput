@@ -92,9 +92,8 @@ define(function(require) {
                 if (userAnswer) {
                     return userAnswer;
                 }
-            } else {
-                console.warn('No local storage available');
-            }
+            } 
+
             return false;
         },
         supportsHtml5Storage: function() {
@@ -116,7 +115,6 @@ define(function(require) {
             }
         },
         onKeyUpTextarea: function() {
-          console.log('onKeyUp');
             this.model.set('_isSaved', false);
             this.onUserAnswerChanged(null, this.$textbox.val());
             this.limitCharacters();
@@ -140,9 +138,8 @@ define(function(require) {
 
             if (this.supportsHtml5Storage()) {
                 localStorage.setItem(identifier, this.$textbox.val());
-            } else {
-                console.warn('No local storage available');
-            }
+            } 
+            
             this.model.set('_userAnswer', this.$textbox.val());
             this.model.set('_isSaved', true);
         },
