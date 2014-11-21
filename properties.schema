@@ -51,7 +51,7 @@
     },
     "clearNotificationTitle": {
       "type":"string",
-      "required":true
+      "required":true,
       "default": "",
       "title": "Cleared notification title text",
       "inputType": "Text",
