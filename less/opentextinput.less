@@ -1,26 +1,71 @@
 /* Opera/IE 8+ */
 
 .openTextInput-component {
+    .openTextInput-count-characters {
+        background: @primary-color;
+        padding: 10px;
+    }
     .openTextInput-answer-container {
-        border: 1px solid #ccc;
+        border: none;
     }
     .openTextInput-item-textbox {
-        width: 98%;
-        padding: 1%;
-        margin: 0;
         border: none;
-        resize: none;
+        color: @primary-color;
         display: block;
-    }
-    .openTextInput-action-button {
-        width: 100%;
+        margin: 0;
+        padding: 1%;
+        resize: none;
+        width: 98%;
     }
     .buttons {
-        width: 50%;
+        font-size: 0;
+        margin-top: @buttons-margin-top;
         margin-left: auto;
         margin-right: auto;
+        width: 100%;
         @media all and (max-width: (@device-width-medium - 1px)) {
             width: 100%;
+        }
+        .openTextInput-save-button,
+        .openTextInput-clear-button,
+        .openTextInput-action-button {
+            background-color:@button-color;
+            border:@button-border;
+            color:@button-text-color;
+            display:inline-block;
+            margin-top:@button-margin-top;
+            padding:@button-padding;
+            text-align: center;
+            text-decoration: none;
+            font-family: @font-family;
+            font-size: @font-size;
+            font-weight: @font-weight-light;
+            &:hover {
+                background-color:@button-hover-color;
+                color:@button-text-hover-color;
+            }
+        }    
+        .openTextInput-save-button {
+            margin-right: 1%;
+            width: 24%;
+            @media all and (max-width: (@device-width-medium - 1px)) {
+                margin-right: %;
+                width: 49.5%;
+            }
+        }
+        .openTextInput-clear-button {
+            margin-right: 1%;
+            width: 24%;
+            @media all and (max-width: (@device-width-medium - 1px)) {
+                width: 49.5%;
+                margin-right: 0;
+            }
+        }
+        .openTextInput-action-button {
+            width: 50%;
+            @media all and (max-width: (@device-width-medium - 1px)) {
+                width: 100%;
+            }
         }
     }
 }
