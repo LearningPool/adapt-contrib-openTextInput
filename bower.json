@@ -1,11 +1,12 @@
 {
   "name": "adapt-contrib-openTextInput",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "homepage": "https://github.com/lc-petranussdorfer/adapt-contrib-openTextInput",
   "authors": [
     "Thomas Eitler <thomas.eitler@learnchamp.com>",
     "Barbara Fellner <me@barbarafellner.at>",
-    "Petra Nussdorfer <petra.nussdorfer@learnchamp.com"
+    "Petra Nussdorfer <petra.nussdorfer@learnchamp.com>",
+    "Brian Quinn <brian@learningpool.com>"
   ],
   "description": "A question component that allows the learner to input open text based upon a question stem.",
   "main": "/js/adapt-contrib-openTextInput.js",
