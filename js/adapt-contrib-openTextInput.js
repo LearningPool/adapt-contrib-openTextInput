@@ -13,7 +13,7 @@ define(function(require) {
     var Adapt = require('coreJS/adapt');
 
     var OpenTextInput = ComponentView.extend({
-        
+
         events: {
             'click .openTextInput-save-button'  : 'onSaveClicked',
             'click .openTextInput-clear-button' : 'onClearClicked',
@@ -23,7 +23,7 @@ define(function(require) {
 
         preRender: function() {
             this.listenTo(this.model, 'change:_isSaved', this.onSaveChanged);
-            this.listenTo(this.model, 'change:_userAnswer', this.onUserAnswerChanged);            
+            this.listenTo(this.model, 'change:_userAnswer', this.onUserAnswerChanged);
             this.listenToOnce(Adapt, 'navigation:backButton', this.handleBackNavigation);
             this.listenToOnce(Adapt, 'navigation:homeButton', this.handleHomeNavigation);
 
@@ -79,7 +79,7 @@ define(function(require) {
                Adapt.trigger(eventToTrigger);
              }, this);
 
-            Adapt.trigger('notify:prompt', promptObject);  
+            Adapt.trigger('notify:prompt', promptObject);
         },
 
         postRender: function() {
@@ -93,7 +93,7 @@ define(function(require) {
                 this.disableTextarea();
                 if (!this.model.get('modelAnswer')) {
                     this.$('.openTextInput-action-button')
-                        .prop('disabled', true);
+                        .prop('disabled', true)
                 } else {
                     this.showUserAnswer();
                 }
@@ -109,7 +109,7 @@ define(function(require) {
                 if (userAnswer) {
                     return userAnswer;
                 }
-            } 
+            }
 
             return false;
         },
@@ -161,8 +161,8 @@ define(function(require) {
 
             if (this.supportsHtml5Storage()) {
                 localStorage.setItem(identifier, this.$textbox.val());
-            } 
-            
+            }
+
             this.model.set('_userAnswer', this.$textbox.val());
             this.model.set('_isSaved', true);
         },
@@ -260,7 +260,8 @@ define(function(require) {
 
         disableButtons: function() {
             this.$('.openTextInput-clear-button, .openTextInput-save-button')
-                .prop('disabled', true);
+                .prop('disabled', true)
+                .addClass('disabled');
         },
 
         updateActionButton: function(buttonText) {
@@ -272,10 +273,10 @@ define(function(require) {
             this.model.set('_buttonState', 'model');
             this.updateActionButton(this.model.get('_buttons').showUserAnswer);
             var modelAnswer = this.model.get('modelAnswer');
-            modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n"); 
+            modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
             this.$textbox.val(modelAnswer);
         },
-        
+
         showUserAnswer: function() {
             this.model.set('_buttonState', 'user');
             this.updateActionButton(this.model.get('_buttons').showModelAnswer);

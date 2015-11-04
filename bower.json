@@ -1,7 +1,7 @@
 {
   "name": "adapt-contrib-openTextInput",
-  "version": "0.0.6",
-  "homepage": "https://github.com/lc-petranussdorfer/adapt-contrib-openTextInput",
+  "version": "0.0.7",
+  "homepage": "https://github.com/learningpool/adapt-contrib-openTextInput",
   "authors": [
     "Thomas Eitler <thomas.eitler@learnchamp.com>",
     "Barbara Fellner <me@barbarafellner.at>",
