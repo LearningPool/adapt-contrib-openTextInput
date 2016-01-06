@@ -242,7 +242,8 @@ define(function(require) {
             } else {
                 this.showUserAnswer();
             }
-            this.model.set('_isComplete', true);
+
+            this.setCompletionStatus();
 
             var pushObject = {
                 title: '',
