@@ -27,6 +27,9 @@ define(function(require) {
             this.listenToOnce(Adapt, 'navigation:backButton', this.handleBackNavigation);
             this.listenToOnce(Adapt, 'navigation:homeButton', this.handleHomeNavigation);
 
+            // Intercept the routing so that text entered can be saved.
+            Adapt.router.set('_canNavigate', false, {pluginName:'_openTextInput'});
+            
             if (!this.model.get('_userAnswer')) {
                 var userAnswer = this.getUserAnswer();
                 if (userAnswer) {
@@ -44,7 +47,9 @@ define(function(require) {
         },
 
         checkForChanges: function(eventToTrigger) {
-            if (this.model.get("_userAnswer") === this.$textbox.val()) {
+            var userAnswer = this.model.get("_userAnswer") || '';
+            
+            if (userAnswer === this.$textbox.val()) {
                 Adapt.router.set('_canNavigate', true, {pluginName:'_openTextInput'});
                 Adapt.trigger(eventToTrigger);
             }
