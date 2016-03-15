@@ -122,7 +122,7 @@ define(function(require) {
         supportsHtml5Storage: function() {
             // check for html5 local storage support
             try {
-                return 'localStorage' in window && window['localStorage'] !== null;
+                return 'localStorage' in window && typeof window['localStorage'] !== 'undefined';
             } catch (e) {
                 return false;
             }
