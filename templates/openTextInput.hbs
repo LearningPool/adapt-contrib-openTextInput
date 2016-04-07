@@ -16,19 +16,10 @@
 
     <div class="openTextInput-answer-container">
         <textarea class="openTextInput-item-textbox"
-            rows={{_numberOfRows}} placeholder="{{placeholder}}" 
+            rows={{_numberOfRows}} placeholder="{{placeholder}}"
             maxlength="{{_allowedCharacters}}">{{_userAnswer}}</textarea>
     </div>
         <div class="buttons">
-            <button class="openTextInput-save-button" disabled="true">
-                {{_buttons.save}}
-            </button>    
-            <button class="openTextInput-clear-button" {{#unless _userAnswer}}disabled="true"{{/unless}}>
-                {{_buttons.clear}}
-            </button>  
-            <button class="openTextInput-action-button" {{#unless _userAnswer}}disabled="true"{{/unless}}>
-                {{_buttons.submit}}
-            </button>
         </div>
     </div>
 </div>

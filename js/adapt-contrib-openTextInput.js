@@ -9,10 +9,10 @@
 
 define(function(require) {
 
-    var ComponentView = require('coreViews/componentView');
+    var QuestionView = require('coreViews/questionView');
     var Adapt = require('coreJS/adapt');
 
-    var OpenTextInput = ComponentView.extend({
+    var OpenTextInput = QuestionView.extend({
 
         events: {
             'click .openTextInput-save-button'  : 'onSaveClicked',
@@ -21,7 +21,7 @@ define(function(require) {
             'keyup .openTextInput-item-textbox' : 'onKeyUpTextarea'
         },
 
-        preRender: function() {
+        setupQuestion: function() {
             this.listenTo(this.model, 'change:_isSaved', this.onSaveChanged);
             this.listenTo(this.model, 'change:_userAnswer', this.onUserAnswerChanged);
             this.listenToOnce(Adapt, 'navigation:backButton', this.handleBackNavigation);
@@ -29,7 +29,7 @@ define(function(require) {
 
             // Intercept the routing so that text entered can be saved.
             Adapt.router.set('_canNavigate', false, {pluginName:'_openTextInput'});
-            
+
             if (!this.model.get('_userAnswer')) {
                 var userAnswer = this.getUserAnswer();
                 if (userAnswer) {
@@ -48,7 +48,7 @@ define(function(require) {
 
         checkForChanges: function(eventToTrigger) {
             var userAnswer = this.model.get("_userAnswer") || '';
-            
+
             if (userAnswer === this.$textbox.val()) {
                 Adapt.router.set('_canNavigate', true, {pluginName:'_openTextInput'});
                 Adapt.trigger(eventToTrigger);
@@ -58,6 +58,14 @@ define(function(require) {
                 this.unsavedChangesNotification(eventToTrigger);
             }
          },
+        canSubmit: function() {
+          var answer = this.model.get('_userAnswer');
+          if (answer && answer.trim() !== '') {
+            // it's correct if there's any text entered.
+            this.model.set('_isCorrect', true);
+          }
+          return answer && answer.trim() !== '';
+        },
 
          unsavedChangesNotification: function(eventToTrigger) {
             var promptObject = {
@@ -87,7 +95,7 @@ define(function(require) {
             Adapt.trigger('notify:prompt', promptObject);
         },
 
-        postRender: function() {
+        onQuestionRendered: function() {
             //set component to ready
             this.$textbox = this.$('.openTextInput-item-textbox');
             this.countCharacter();
