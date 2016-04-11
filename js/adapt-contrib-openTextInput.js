@@ -283,18 +283,21 @@ define(function(require) {
                 .html(buttonText);
         },
 
-        showModelAnswer: function() {
-            this.model.set('_buttonState', 'model');
+        showCorrectAnswer: function() {
+            this.model.set('_buttonState', 'hideCorrectAnswer');
             this.updateActionButton(this.model.get('_buttons').showUserAnswer);
             var modelAnswer = this.model.get('modelAnswer');
             modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
-            this.$textbox.val(modelAnswer);
+            modelAnswer = '<div class="openTextInput-item-modelanswer openTextInput-item-textbox">' + modelAnswer + '</div>';
+            this.$textbox.hide();
+            this.$textbox.after(modelAnswer);
         },
 
-        showUserAnswer: function() {
-            this.model.set('_buttonState', 'user');
+        hideCorrectAnswer: function() {
+            this.model.set('_buttonState', 'showCorrectAnswer');
             this.updateActionButton(this.model.get('_buttons').showModelAnswer);
-            this.$textbox.val(this.model.get('_userAnswer'));
+            this.$textbox.val(this.model.get('_userAnswer')).show();
+            this.$('.openTextInput-item-modelanswer').remove();
         }
     });
 

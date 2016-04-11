@@ -117,7 +117,7 @@
       "required":true,
       "default": "",
       "title": "Model answer",
-      "inputType": "Text",
+      "inputType": "TextArea",
       "validators": ["required"],
       "help": "This is the model answer which will be displayed when the model answer button is clicked"
     },
