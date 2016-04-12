@@ -58,24 +58,6 @@
       "validators": [],
       "help": "If set to 'true', the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
     },
-    "_attempts": {
-      "type":"number",
-      "required":true,
-      "default":1,
-      "title": "Attempts",
-      "inputType":"Number",
-      "validators": ["required", "number"],
-      "help": "How many attempts the learner is allowed"
-    },
-    "_shouldDisplayAttempts": {
-      "type":"boolean",
-      "required":false,
-      "default": false,
-      "title": "Display Attempts",
-      "inputType": {"type": "Boolean", "options": [true, false]},
-      "validators": [],
-      "help": "Select 'true' to display the numbers of attempts left"
-    },
     "clearNotificationTitle": {
       "type":"string",
       "required":true,
