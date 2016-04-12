@@ -17,7 +17,6 @@ define(function(require) {
         events: {
             'click .openTextInput-save-button'  : 'onSaveClicked',
             'click .openTextInput-clear-button' : 'onClearClicked',
-            'click .openTextInput-action-button': 'onActionClicked',
             'keyup .openTextInput-item-textbox' : 'onKeyUpTextarea'
         },
 
@@ -108,12 +107,6 @@ define(function(require) {
             if (this.model.get('_isComplete')) {
                 this.disableButtons();
                 this.disableTextarea();
-                if (!this.model.get('modelAnswer')) {
-                    this.$('.openTextInput-action-button')
-                        .prop('disabled', true)
-                } else {
-                    this.showUserAnswer();
-                }
             }
         },
 
@@ -247,8 +240,6 @@ define(function(require) {
                 } else {
                   this.model.set('_buttonState', 'hideCorrectAnswer');
                 }
-            } else {
-                this.submitAnswer();
             }
         },
 
@@ -256,12 +247,6 @@ define(function(require) {
             this.storeUserAnswer();
             this.disableButtons();
             this.disableTextarea();
-            if (!this.model.get('modelAnswer')) {
-                this.$('.openTextInput-action-button')
-                    .prop('disabled', true);
-            } else {
-                this.showUserAnswer();
-            }
 
             this.setCompletionStatus();
 
@@ -291,7 +276,7 @@ define(function(require) {
         },
 
         showCorrectAnswer: function() {
-            this.buttonsView.$('.buttons-action').a11y_cntrl_enabled(true);
+            this.$('.buttons-action').a11y_cntrl_enabled(true);
             this.model.set('_buttonState', 'hideCorrectAnswer');
             this.updateActionButton(this.model.get('_buttons').showUserAnswer);
             var modelAnswer = this.model.get('modelAnswer');
@@ -302,9 +287,12 @@ define(function(require) {
         },
 
         hideCorrectAnswer: function() {
-            this.buttonsView.$('.buttons-action').a11y_cntrl_enabled(true);
+            this.$('.buttons-action').a11y_cntrl_enabled(true);
             this.model.set('_buttonState', 'showCorrectAnswer');
             this.updateActionButton(this.model.get('_buttons').showModelAnswer);
+            if (this.$textbox === undefined) {
+              this.$textbox = this.$('.openTextInput-item-textbox');
+            }
             this.$textbox.val(this.model.get('_userAnswer')).show();
             this.$('.openTextInput-item-modelanswer').remove();
         }
