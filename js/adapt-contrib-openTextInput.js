@@ -66,6 +66,9 @@ define(function(require) {
           }
           return answer && answer.trim() !== '';
         },
+        isCorrect: function() {
+          return this.canSubmit();
+        },
 
          unsavedChangesNotification: function(eventToTrigger) {
             var promptObject = {
@@ -98,6 +101,7 @@ define(function(require) {
         onQuestionRendered: function() {
             //set component to ready
             this.$textbox = this.$('.openTextInput-item-textbox');
+            this.listenTo(this.buttonsView, 'buttons:submit', this.onActionClicked);
             this.countCharacter();
             this.setReadyStatus();
 
@@ -235,10 +239,13 @@ define(function(require) {
 
         onActionClicked: function(event) {
             if (this.model.get('_isComplete')) {
-                if (this.model.get('_buttonState') == 'model') {
-                    this.showUserAnswer();
+                // Keep it enabled so we can show the model answer,
+                // which in this function we are making sure is available.
+                this.buttonsView.$('.buttons-action').a11y_cntrl_enabled(true);
+                if (this.model.get('_buttonState') == 'correct') {
+                  this.model.set('_buttonState', 'showCorrectAnswer');
                 } else {
-                    this.showModelAnswer();
+                  this.model.set('_buttonState', 'hideCorrectAnswer');
                 }
             } else {
                 this.submitAnswer();
@@ -284,6 +291,7 @@ define(function(require) {
         },
 
         showCorrectAnswer: function() {
+            this.buttonsView.$('.buttons-action').a11y_cntrl_enabled(true);
             this.model.set('_buttonState', 'hideCorrectAnswer');
             this.updateActionButton(this.model.get('_buttons').showUserAnswer);
             var modelAnswer = this.model.get('modelAnswer');
@@ -294,6 +302,7 @@ define(function(require) {
         },
 
         hideCorrectAnswer: function() {
+            this.buttonsView.$('.buttons-action').a11y_cntrl_enabled(true);
             this.model.set('_buttonState', 'showCorrectAnswer');
             this.updateActionButton(this.model.get('_buttons').showModelAnswer);
             this.$textbox.val(this.model.get('_userAnswer')).show();
