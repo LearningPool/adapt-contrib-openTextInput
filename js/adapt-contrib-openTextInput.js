@@ -58,11 +58,7 @@ define(function(require) {
             }
          },
         canSubmit: function() {
-          var answer = this.model.get('_userAnswer');
-          if (answer && answer.trim() !== '') {
-            // it's correct if there's any text entered.
-            this.model.set('_isCorrect', true);
-          }
+          var answer = this.$textbox.val();
           return answer && answer.trim() !== '';
         },
         isCorrect: function() {
