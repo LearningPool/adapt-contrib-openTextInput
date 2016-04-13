@@ -15,8 +15,6 @@ define(function(require) {
   var OpenTextInput = QuestionView.extend({
 
     events: {
-      'click .openTextInput-save-button': 'onSaveClicked',
-      'click .openTextInput-clear-button': 'onClearClicked',
       'keyup .openTextInput-item-textbox': 'onKeyUpTextarea'
     },
 
@@ -25,9 +23,6 @@ define(function(require) {
       this.listenTo(this.model, 'change:_userAnswer', this.onUserAnswerChanged);
       this.listenToOnce(Adapt, 'navigation:backButton', this.handleBackNavigation);
       this.listenToOnce(Adapt, 'navigation:homeButton', this.handleHomeNavigation);
-
-      // Intercept the routing so that text entered can be saved.
-      Adapt.router.set('_canNavigate', false, {pluginName: '_openTextInput'});
 
       if (!this.model.get('_userAnswer')) {
         var userAnswer = this.getUserAnswer();
@@ -38,64 +33,29 @@ define(function(require) {
     },
 
     handleBackNavigation: function() {
-      this.checkForChanges('navigation:backButton');
+      this.model.set('_userAnswer', this.$textbox.val());
+      Adapt.trigger('navigation:backButton');
     },
 
     handleHomeNavigation: function() {
-      this.checkForChanges('navigation:homeButton');
+      this.model.set('_userAnswer', this.$textbox.val());
+      Adapt.trigger('navigation:homeButton');
     },
 
-    checkForChanges: function(eventToTrigger) {
-      var userAnswer = this.model.get("_userAnswer") || '';
-
-      if (userAnswer === this.$textbox.val()) {
-        Adapt.router.set('_canNavigate', true, {pluginName: '_openTextInput'});
-        Adapt.trigger(eventToTrigger);
-      }
-      else {
-        Adapt.router.set('_canNavigate', false, {pluginName: '_openTextInput'});
-        this.unsavedChangesNotification(eventToTrigger);
-      }
-    },
     canSubmit: function() {
       var answer = this.$textbox.val();
       return answer && answer.trim() !== '';
     },
+
     isCorrect: function() {
       return this.canSubmit();
-    },
-
-    unsavedChangesNotification: function(eventToTrigger) {
-      var promptObject = {
-        title: this.model.get('unsavedChangesNotificationTitle'),
-        body: this.model.get('unsavedChangesNotificationBody'),
-        _prompts: [{
-          promptText: 'Yes',
-          _callbackEvent: '_openTextInput:save',
-        }, {
-          promptText: 'No',
-          _callbackEvent: '_openTextInput:doNotSave'
-        }],
-        _showIcon: true
-      };
-
-      Adapt.once('_openTextInput:save', function() {
-        this.storeUserAnswer();
-        Adapt.router.set('_canNavigate', true, {pluginName: '_openTextInput'});
-        Adapt.trigger(eventToTrigger);
-      }, this);
-
-      Adapt.once('_openTextInput:doNotSave', function() {
-        Adapt.router.set('_canNavigate', true, {pluginName: '_openTextInput'});
-        Adapt.trigger(eventToTrigger);
-      }, this);
-
-      Adapt.trigger('notify:prompt', promptObject);
     },
 
     onQuestionRendered: function() {
       //set component to ready
       this.$textbox = this.$('.openTextInput-item-textbox');
+      this.$countChars = this.$('.openTextInput-count-characters');
+
       this.listenTo(this.buttonsView, 'buttons:submit', this.onActionClicked);
       this.countCharacter();
       this.setReadyStatus();
@@ -155,12 +115,6 @@ define(function(require) {
       }
     },
 
-    onSaveClicked: function(event) {
-      event.preventDefault();
-      this.storeUserAnswer();
-      this.notifyUserAnswerIsSaved();
-    },
-
     storeUserAnswer: function() {
       // use unique identifier to avoid collisions with other components
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
@@ -180,35 +134,12 @@ define(function(require) {
         _timeout: 2000,
         _callbackEvent: '_openTextInput'
       };
+
       Adapt.trigger('notify:push', pushObject);
     },
 
     onSaveChanged: function(model, changedValue) {
       this.$('.openTextInput-save-button').prop('disabled', changedValue);
-    },
-
-    onClearClicked: function(event) {
-      event.preventDefault();
-
-      var promptObject = {
-        title: this.model.get('clearNotificationTitle'),
-        body: this.model.get('clearNotificationBody'),
-        _prompts: [{
-          promptText: 'Yes',
-          _callbackEvent: '_openTextInput:clearText',
-        }, {
-          promptText: 'No',
-          _callbackEvent: '_openTextInput:keepText'
-        }],
-        _showIcon: true
-      };
-
-      Adapt.once('_openTextInput:clearText', function() {
-        this.clearTextarea();
-        this.onUserAnswerChanged(null, this.$textbox.val());
-        this.countCharacter();
-      }, this);
-      Adapt.trigger('notify:prompt', promptObject);
     },
 
     clearTextarea: function(event) {
@@ -224,13 +155,22 @@ define(function(require) {
         this.$('.openTextInput-clear-button, .openTextInput-action-button')
           .prop('disabled', true);
       }
+
+      this.model.set('_isSaved', false);
     },
 
     onActionClicked: function(event) {
       if (this.model.get('_isComplete')) {
+        if (_.isEmpty(this.model.get('modelAnswer'))) {
+          this.$('.buttons-action').a11y_cntrl_enabled(false);
+
+          this.$('.buttons-action').html(this.model.get('_isCorrect') ? "Correct" : "Incorrect");
+
+          return;
+        }
+
         // Keep it enabled so we can show the model answer,
         // which in this function we are making sure is available.
-        this.buttonsView.$('.buttons-action').a11y_cntrl_enabled(true);
         if (this.model.get('_buttonState') == 'correct') {
           this.model.set('_buttonState', 'showCorrectAnswer');
         } else {
@@ -275,10 +215,14 @@ define(function(require) {
       this.$('.buttons-action').a11y_cntrl_enabled(true);
       this.model.set('_buttonState', 'hideCorrectAnswer');
       this.updateActionButton(this.model.get('_buttons').showUserAnswer);
+      
       var modelAnswer = this.model.get('modelAnswer');
       modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
       modelAnswer = '<div class="openTextInput-item-modelanswer openTextInput-item-textbox">' + modelAnswer + '</div>';
+
       this.$textbox.hide();
+      this.$countChars.hide();
+
       this.$textbox.after(modelAnswer);
     },
 
@@ -286,10 +230,14 @@ define(function(require) {
       this.$('.buttons-action').a11y_cntrl_enabled(true);
       this.model.set('_buttonState', 'showCorrectAnswer');
       this.updateActionButton(this.model.get('_buttons').showModelAnswer);
+
       if (this.$textbox === undefined) {
         this.$textbox = this.$('.openTextInput-item-textbox');
       }
+
       this.$textbox.val(this.model.get('_userAnswer')).show();
+      this.$countChars.show();
+
       this.$('.openTextInput-item-modelanswer').remove();
     }
   });
