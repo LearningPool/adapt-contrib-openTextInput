@@ -161,14 +161,6 @@ define(function(require) {
 
     onActionClicked: function(event) {
       if (this.model.get('_isComplete')) {
-        if (_.isEmpty(this.model.get('modelAnswer'))) {
-          this.$('.buttons-action').a11y_cntrl_enabled(false);
-
-          this.$('.buttons-action').html(this.model.get('_isCorrect') ? "Correct" : "Incorrect");
-
-          return;
-        }
-
         // Keep it enabled so we can show the model answer,
         // which in this function we are making sure is available.
         if (this.model.get('_buttonState') == 'correct') {
@@ -215,7 +207,7 @@ define(function(require) {
       this.$('.buttons-action').a11y_cntrl_enabled(true);
       this.model.set('_buttonState', 'hideCorrectAnswer');
       this.updateActionButton(this.model.get('_buttons').showUserAnswer);
-      
+
       var modelAnswer = this.model.get('modelAnswer');
       modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
       modelAnswer = '<div class="openTextInput-item-modelanswer openTextInput-item-textbox">' + modelAnswer + '</div>';
@@ -236,6 +228,11 @@ define(function(require) {
       }
 
       this.$textbox.val(this.model.get('_userAnswer')).show();
+
+      if (this.$countChars === undefined) {
+        this.$countChars = this.$('.openTextInput-count-characters');
+      }
+
       this.$countChars.show();
 
       this.$('.openTextInput-item-modelanswer').remove();
