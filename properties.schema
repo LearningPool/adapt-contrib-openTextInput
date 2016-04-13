@@ -49,6 +49,15 @@
       "validators": ["required", "number"],
       "help": "The number textarea rows"
     },
+    "_recordInteraction": {
+      "type":"boolean",
+      "required":false,
+      "default": true,
+      "title": "Record interaction",
+      "inputType": {"type": "Boolean", "options": [true, false]},
+      "validators": [],
+      "help": "If set to 'true', the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
+    },
     "clearNotificationTitle": {
       "type":"string",
       "required":true,
@@ -90,7 +99,7 @@
       "required":true,
       "default": "",
       "title": "Model answer",
-      "inputType": "Text",
+      "inputType": "TextArea",
       "validators": ["required"],
       "help": "This is the model answer which will be displayed when the model answer button is clicked"
     },
@@ -125,39 +134,127 @@
           "validators": [],
           "help": "Button label text for the save button"
         },
-        "submit": {
-          "type":"string",
-          "required": false,
-          "default": "",
-          "inputType": "QuestionButton",
-          "validators": [],
-          "help": "Button label text for the submit button"
+        "_submit":{
+          "type":"object",
+          "title": "Submit",
+          "properties":{
+            "buttonText": {
+              "type":"string",
+              "required": false,
+              "default": "Submit",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text for the submit button"
+            },
+            "ariaLabel": {
+              "type":"string",
+              "required": false,
+              "default": "Submit",
+              "title": "",
+              "inputType": "Text",
+              "validators": [],
+              "help": "Aria label for the submit button"
+            }
+          }
         },
-        "showModelAnswer": {
-          "type":"string",
-          "required": false,
-          "default": "",
-          "inputType": "QuestionButton",
-          "validators": [],
-          "help": "Button label text to show the model answer"
+        "_showCorrectAnswer": {
+          "type":"object",
+          "title": "Show Correct Answer",
+          "properties":{
+            "buttonText": {
+              "type":"string",
+              "required": false,
+              "default": "Show model answer",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text to show the model answer"
+            },
+            "ariaLabel": {
+              "type":"string",
+              "required": false,
+              "default": "Show model answer",
+              "title": "",
+              "inputType": "Text",
+              "validators": [],
+              "help": "Aria label for the show model answer button"
+            }
+          }
         },
-        "showUserAnswer": {
-          "type":"string",
-          "required": false,
-          "default": "",
-          "inputType": "QuestionButton",
-          "validators": [],
-          "help": "Button label text to show the user's answer"
+        "_hideCorrectAnswer": {
+          "type":"object",
+          "title": "Hide Correct Answer",
+          "properties":{
+            "buttonText": {
+              "type":"string",
+              "required": false,
+              "default": "Hide model answer",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text to hide the model answer"
+            },
+            "ariaLabel": {
+              "type":"string",
+              "required": false,
+              "default": "Hide model answer",
+              "title": "",
+              "inputType": "Text",
+              "validators": [],
+              "help": "Aria label for the hide model answer button"
+            }
+          }
         },
-        "clear": {
-          "type":"string",
-          "required": false,
-          "default": "",
-          "inputType": "QuestionButton",
-          "validators": [],
-          "help": "Button label text for the clear button"
-        } 
-      }      
+        "_showFeedback": {
+          "type":"object",
+          "title": "Show Feedback",
+          "properties": {
+            "buttonText": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text to show feedback"
+            },
+            "ariaLabel": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "Text",
+              "validators": [],
+              "help": "Aria label for the show feedback button"
+            }
+          }
+        },
+        "_reset": {
+          "type":"object",
+          "title": "Reset",
+          "properties":{
+            "buttonText": {
+              "type":"string",
+              "required": false,
+              "default": "Reset",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text for the reset button"
+            },
+            "ariaLabel": {
+              "type":"string",
+              "required": false,
+              "default": "Reset",
+              "title": "",
+              "inputType": "Text",
+              "validators": [],
+              "help": "Aria label for the reset button"
+            }
+          }
+        }
+      }
     }
   }
 }
