@@ -155,8 +155,6 @@ define(function(require) {
         this.$('.openTextInput-clear-button, .openTextInput-action-button')
           .prop('disabled', true);
       }
-
-      this.model.set('_isSaved', false);
     },
 
     onActionClicked: function(event) {
