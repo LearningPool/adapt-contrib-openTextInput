@@ -2,9 +2,8 @@
  * adapt-contrib-openTextInput
  * License - http://github.com/adaptlearning/adapt_framework/LICENSE
  * Maintainers
- * Thomas Eitler <thomas.eitler@learnchamp.com>
- * Barbara Fellner <me@barbarafellner.at>
- * Petra Nussdorfer <petra.nussdorfer@learnchamp.com>
+ * Brian Quinn <brian@learningpool.com>
+ * Barry McCay <barry@learningpool.com>
  */
 
 define(function(require) {
@@ -19,10 +18,10 @@ define(function(require) {
     },
 
     setupQuestion: function() {
-      this.listenTo(this.model, 'change:_isSaved', this.onSaveChanged);
-      this.listenTo(this.model, 'change:_userAnswer', this.onUserAnswerChanged);
-      this.listenToOnce(Adapt, 'navigation:backButton', this.handleBackNavigation);
-      this.listenToOnce(Adapt, 'navigation:homeButton', this.handleHomeNavigation);
+      // this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
+
+      // Disable feedback.
+      this.model.set('_canShowFeedback', false);
 
       if (!this.model.get('_userAnswer')) {
         var userAnswer = this.getUserAnswer();
@@ -30,16 +29,6 @@ define(function(require) {
           this.model.set('_userAnswer', userAnswer);
         }
       }
-    },
-
-    handleBackNavigation: function() {
-      this.model.set('_userAnswer', this.$textbox.val());
-      Adapt.trigger('navigation:backButton');
-    },
-
-    handleHomeNavigation: function() {
-      this.model.set('_userAnswer', this.$textbox.val());
-      Adapt.trigger('navigation:homeButton');
     },
 
     canSubmit: function() {
@@ -52,16 +41,17 @@ define(function(require) {
     },
 
     onQuestionRendered: function() {
+      this.listenTo(this.buttonsView, 'buttons:submit', this.onActionClicked);
+
       //set component to ready
       this.$textbox = this.$('.openTextInput-item-textbox');
       this.$countChars = this.$('.openTextInput-count-characters');
 
-      this.listenTo(this.buttonsView, 'buttons:submit', this.onActionClicked);
-      this.countCharacter();
+      this.countCharacters();
       this.setReadyStatus();
 
       if (this.model.get('_isComplete')) {
-        this.disableButtons();
+        // this.disableButtons();
         this.disableTextarea();
       }
     },
@@ -89,7 +79,7 @@ define(function(require) {
       }
     },
 
-    countCharacter: function() {
+    countCharacters: function() {
       var charLengthOfTextarea = this.$textbox.val().length;
       var allowedCharacters = this.model.get('_allowedCharacters');
       if (allowedCharacters != null) {
@@ -100,12 +90,14 @@ define(function(require) {
       }
     },
 
-    onKeyUpTextarea: function() {
-      this.model.set('_isSaved', false);
-      this.onUserAnswerChanged(null, this.$textbox.val());
+    onKeyUpTextarea: _.throttle(function() {
       this.limitCharacters();
-      this.countCharacter();
-    },
+      var text = this.$textbox.val();
+      this.model.set('_userAnswer', text);
+
+      this.countCharacters();
+      this.storeUserAnswer();
+    }, 300),
 
     limitCharacters: function() {
       var allowedCharacters = this.model.get('_allowedCharacters');
@@ -120,41 +112,11 @@ define(function(require) {
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
 
       if (this.supportsHtml5Storage()) {
-        localStorage.setItem(identifier, this.$textbox.val());
+        localStorage.setItem(identifier, this.model.get('_userAnswer'));
       }
 
-      this.model.set('_userAnswer', this.$textbox.val());
+      // this.model.set('_userAnswer', this.$textbox.val());
       this.model.set('_isSaved', true);
-    },
-
-    notifyUserAnswerIsSaved: function() {
-      var pushObject = {
-        title: '',
-        body: this.model.get('savedMessage'),
-        _timeout: 2000,
-        _callbackEvent: '_openTextInput'
-      };
-
-      Adapt.trigger('notify:push', pushObject);
-    },
-
-    onSaveChanged: function(model, changedValue) {
-      this.$('.openTextInput-save-button').prop('disabled', changedValue);
-    },
-
-    clearTextarea: function(event) {
-      this.$textbox.val('');
-      this.model.set('_isSaved', false);
-    },
-
-    onUserAnswerChanged: function(model, changedValue) {
-      if (changedValue) {
-        this.$('.openTextInput-clear-button, .openTextInput-action-button')
-          .prop('disabled', false);
-      } else {
-        this.$('.openTextInput-clear-button, .openTextInput-action-button')
-          .prop('disabled', true);
-      }
     },
 
     onActionClicked: function(event) {
@@ -169,31 +131,8 @@ define(function(require) {
       }
     },
 
-    submitAnswer: function() {
-      this.storeUserAnswer();
-      this.disableButtons();
-      this.disableTextarea();
-
-      this.setCompletionStatus();
-
-      var pushObject = {
-        title: '',
-        body: this.model.get('submittedMessage'),
-        _timeout: 2000,
-        _callbackEvent: '_openTextInput:submitted'
-      };
-
-      Adapt.trigger('notify:push', pushObject);
-    },
-
     disableTextarea: function() {
       this.$textbox.prop('disabled', true);
-    },
-
-    disableButtons: function() {
-      this.$('.openTextInput-clear-button, .openTextInput-save-button')
-        .prop('disabled', true)
-        .addClass('disabled');
     },
 
     updateActionButton: function(buttonText) {
@@ -234,6 +173,22 @@ define(function(require) {
       this.$countChars.show();
 
       this.$('.openTextInput-item-modelanswer').remove();
+    },
+
+    /**
+    * Used by adapt-contrib-spoor to get the user's answers in the format required by the cmi.interactions.n.student_response data field
+    */
+    getResponse: function() {
+      var userAnswer = this.model.get('_userAnswer') || '';
+
+      return userAnswer;
+    },
+
+    /**
+    * Used by adapt-contrib-spoor to get the type of this question in the format required by the cmi.interactions.n.type data field
+    */ 
+    getResponseType: function() {
+        return "fill-in";
     }
   });
 

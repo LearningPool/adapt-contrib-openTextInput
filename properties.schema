@@ -52,47 +52,11 @@
     "_recordInteraction": {
       "type":"boolean",
       "required":false,
-      "default": true,
+      "default": false,
       "title": "Record interaction",
       "inputType": {"type": "Boolean", "options": [true, false]},
       "validators": [],
       "help": "If set to 'true', the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
-    },
-    "clearNotificationTitle": {
-      "type":"string",
-      "required":true,
-      "default": "",
-      "title": "Cleared notification title text",
-      "inputType": "Text",
-      "validators": ["required"],
-      "help": "This is title text which will be displayed when the clear button is clicked"
-    },
-    "clearNotificationBody": {
-      "type":"string",
-      "required":true,
-      "default": "",
-      "title": "Cleared notification body text",
-      "inputType": "Text",
-      "validators": ["required"],
-      "help": "This is the body text which will be displayed when the clear button is clicked"
-    },
-    "unsavedChangesNotificationTitle": {
-      "type":"string",
-      "required":true,
-      "default": "",
-      "title": "Unsaved changes notification title text",
-      "inputType": "Text",
-      "validators": ["required"],
-      "help": "This is the title text which will be displayed when user has unsaved changes"
-    },
-    "unsavedChangesNotificationBody": {
-      "type":"string",
-      "required":true,
-      "default": "",
-      "title": "Unsaved changes notification body text",
-      "inputType": "Text",
-      "validators": ["required"],
-      "help": "This is the body text which will be displayed when user has unsaved changes"
     },
     "modelAnswer": {
       "type":"string",
@@ -103,37 +67,11 @@
       "validators": ["required"],
       "help": "This is the model answer which will be displayed when the model answer button is clicked"
     },
-    "savedMessage": {
-      "type":"string",
-      "required":true,
-      "default": "",
-      "title": "Saved message",
-      "inputType": "Text",
-      "validators": ["required"],
-      "help": "This is the message displayed to the user when the text is saved"
-    },
-    "submittedMessage": {
-      "type":"string",
-      "required":true,
-      "default": "",
-      "title": "Submitted message",
-      "inputType": "Text",
-      "validators": ["required"],
-      "help": "This is the message displayed to the user when the text is submitted"
-    },
     "_buttons": {
       "type":"object",
       "title": "Buttons",
       "required": false,
       "properties":{
-        "save": {
-          "type":"string",
-          "required": false,
-          "default": "",
-          "inputType": "QuestionButton",
-          "validators": [],
-          "help": "Button label text for the save button"
-        },
         "_submit":{
           "type":"object",
           "title": "Submit",
