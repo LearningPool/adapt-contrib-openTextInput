@@ -121,8 +121,9 @@ define(function(require) {
 
     onActionClicked: function(event) {
       if (this.model.get('_isComplete')) {
-        // Keep it enabled so we can show the model answer,
-        // which in this function we are making sure is available.
+        // Keep it enabled so we can show the model answer, which this function we are making sure is available.
+        this.$('.buttons-action').a11y_cntrl_enabled(true);
+
         if (this.model.get('_buttonState') == 'correct') {
           this.model.set('_buttonState', 'showCorrectAnswer');
         } else {
@@ -141,7 +142,6 @@ define(function(require) {
     },
 
     showCorrectAnswer: function() {
-      this.$('.buttons-action').a11y_cntrl_enabled(true);
       this.model.set('_buttonState', 'hideCorrectAnswer');
       this.updateActionButton(this.model.get('_buttons').showUserAnswer);
 
@@ -156,7 +156,6 @@ define(function(require) {
     },
 
     hideCorrectAnswer: function() {
-      this.$('.buttons-action').a11y_cntrl_enabled(true);
       this.model.set('_buttonState', 'showCorrectAnswer');
       this.updateActionButton(this.model.get('_buttons').showModelAnswer);
 
