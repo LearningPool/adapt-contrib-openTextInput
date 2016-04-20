@@ -67,6 +67,15 @@
       "validators": ["required"],
       "help": "This is the model answer which will be displayed when the model answer button is clicked"
     },
+    "savedMessage": {
+      "type":"string",
+      "required":true,
+      "default": "Changes saved",
+      "title": "Saved message",
+      "inputType": "Text",
+      "validators": [],
+      "help": "This is the message displayed to the user when the text is saved"
+    },
     "_buttons": {
       "type":"object",
       "title": "Buttons",

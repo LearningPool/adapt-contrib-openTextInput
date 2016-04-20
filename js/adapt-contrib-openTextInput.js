@@ -51,9 +51,7 @@ define(function(require) {
       this.$countChars = this.$('.openTextInput-count-characters');
 
       this.$autosave = this.$('.openTextInput-autosave');
-      this.$autosave.html(
-        _.isEmpty(this.model.get('savedMessage')) ? "Changes saved" : this.model.get('savedMessage')
-      );
+      this.$autosave.text(this.model.get('savedMessage'));
 
       this.$autosave.css({opacity: 0});
 
