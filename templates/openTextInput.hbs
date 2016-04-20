@@ -1,25 +1,18 @@
 {{! Maintainers - LearnChamp}}
 <div class="component-inner openTextInput-inner">
-    {{> component this}}
-    <div class="component-widget openTextInput-widget">
+  {{> component this}}
+  <div class="component-widget openTextInput-widget">
     <div class="openTextInput-count-characters">
-        <span class="openTextInput-count-text">
-            {{#if _allowedCharacters}}
-                {{remainingCharactersText}}
-            {{else}}
-                {{characterCountText}}
-            {{/if}}
-        </span>
-        <span class="openTextInput-count-amount">
-        </span>
+      <span class="openTextInput-count-amount"></span>
+      <div class="openTextInput-autosave"></div>
     </div>
 
     <div class="openTextInput-answer-container">
         <textarea class="openTextInput-item-textbox"
-            rows={{_numberOfRows}} placeholder="{{placeholder}}"
-            maxlength="{{_allowedCharacters}}">{{_userAnswer}}</textarea>
+                  rows={{_numberOfRows}} placeholder="{{placeholder}}"
+                  maxlength="{{_allowedCharacters}}">{{_userAnswer}}</textarea>
     </div>
-        <div class="buttons">
-        </div>
+    <div class="buttons">
     </div>
+  </div>
 </div>
