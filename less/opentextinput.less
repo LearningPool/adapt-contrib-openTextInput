@@ -4,6 +4,20 @@
     .openTextInput-count-characters {
         background: @primary-color;
         padding: 10px;
+        position: relative;
+        .openTextInput-count-amount {
+            color: @white;
+            font-weight: bold;
+        }
+        .openTextInput-autosave {
+            color: @white;
+            display: inline-block;
+            font-size: 12px;
+            margin-right: 10px;
+            position: absolute;
+            right: 0;
+            style: italic;
+        }
     }
     .openTextInput-answer-container {
         border: none;
@@ -19,32 +33,30 @@
     }
     .buttons {
         font-size: 0;
-        margin-top: @button-margin-top;
         margin-left: auto;
         margin-right: auto;
+        margin-top: @button-margin-top;
         width: 100%;
         @media all and (max-width: (@device-width-medium - 1px)) {
             width: 100%;
         }
-        .openTextInput-save-button,
-        .openTextInput-clear-button,
         .openTextInput-action-button {
-            background-color:@button-color;
-            border:@button-border;
-            color:@button-text-color;
-            display:inline-block;
-            margin-top:@button-margin-top;
-            padding:@button-padding;
-            text-align: center;
-            text-decoration: none;
+            background-color: @button-color;
+            border: @button-border;
+            color: @button-text-color;
+            display: inline-block;
             font-family: @font-family;
             font-size: @font-size;
             font-weight: @font-weight-light;
+            margin-top: @button-margin-top;
+            padding: @button-padding;
+            text-align: center;
+            text-decoration: none;
             &:hover {
-                background-color:@button-hover-color;
-                color:@button-text-hover-color;
+                background-color: @button-hover-color;
+                color: @button-text-hover-color;
             }
-        }    
+        }
         .openTextInput-save-button {
             margin-right: 1%;
             width: 24%;
@@ -57,8 +69,8 @@
             margin-right: 1%;
             width: 24%;
             @media all and (max-width: (@device-width-medium - 1px)) {
-                width: 49.5%;
                 margin-right: 0;
+                width: 49.5%;
             }
         }
         .openTextInput-action-button {

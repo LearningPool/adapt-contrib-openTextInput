@@ -3,7 +3,7 @@
  * License - http://github.com/adaptlearning/adapt_framework/LICENSE
  * Maintainers
  * Brian Quinn <brian@learningpool.com>
- * Barry McCay <barry@learningpool.com>
+ * Barry McKay <barry@learningpool.com>
  */
 
 define(function(require) {
@@ -18,10 +18,10 @@ define(function(require) {
     },
 
     setupQuestion: function() {
-      // this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
+      this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
 
-      // Disable feedback.
       this.model.set('_canShowFeedback', false);
+      this.model.set('_canShowModelAnswer', true);
 
       if (!this.model.get('_userAnswer')) {
         var userAnswer = this.getUserAnswer();
@@ -29,6 +29,10 @@ define(function(require) {
           this.model.set('_userAnswer', userAnswer);
         }
       }
+    },
+
+    onCompleteChanged: function() {
+      this.$textbox.prop('disabled', this.model.get('_isComplete'));
     },
 
     canSubmit: function() {
@@ -43,17 +47,18 @@ define(function(require) {
     onQuestionRendered: function() {
       this.listenTo(this.buttonsView, 'buttons:submit', this.onActionClicked);
 
-      //set component to ready
       this.$textbox = this.$('.openTextInput-item-textbox');
       this.$countChars = this.$('.openTextInput-count-characters');
+
+      this.$autosave = this.$('.openTextInput-autosave');
+      this.$autosave.text(this.model.get('savedMessage'));
+
+      this.$autosave.css({opacity: 0});
 
       this.countCharacters();
       this.setReadyStatus();
 
-      if (this.model.get('_isComplete')) {
-        // this.disableButtons();
-        this.disableTextarea();
-      }
+      this.onCompleteChanged();
     },
 
     getUserAnswer: function() {
@@ -96,7 +101,16 @@ define(function(require) {
       this.model.set('_userAnswer', text);
 
       this.countCharacters();
-      this.storeUserAnswer();
+
+      if (this.saveTimeout) {
+        clearTimeout(this.saveTimeout);
+      }
+
+      var self = this;
+      this.saveTimeout = setTimeout(function() {
+        self.storeUserAnswer();
+      }, 2000);
+
     }, 300),
 
     limitCharacters: function() {
@@ -108,21 +122,24 @@ define(function(require) {
     },
 
     storeUserAnswer: function() {
-      // use unique identifier to avoid collisions with other components
+      // Use unique identifier to avoid collisions with other components
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
 
       if (this.supportsHtml5Storage()) {
         localStorage.setItem(identifier, this.model.get('_userAnswer'));
       }
 
-      // this.model.set('_userAnswer', this.$textbox.val());
       this.model.set('_isSaved', true);
+
+      this.$autosave.css({opacity: 100});
+      this.$autosave.delay(1000).animate({opacity: 0});
     },
 
     onActionClicked: function(event) {
       if (this.model.get('_isComplete')) {
-        // Keep it enabled so we can show the model answer,
-        // which in this function we are making sure is available.
+        // Keep the action button enabled so we can show the model answer
+        this.$('.buttons-action').a11y_cntrl_enabled(true);
+
         if (this.model.get('_buttonState') == 'correct') {
           this.model.set('_buttonState', 'showCorrectAnswer');
         } else {
@@ -131,17 +148,14 @@ define(function(require) {
       }
     },
 
-    disableTextarea: function() {
-      this.$textbox.prop('disabled', true);
-    },
-
     updateActionButton: function(buttonText) {
-      this.$('.openTextInput-action-button')
-        .html(buttonText);
+      // Keep the action button enabled so we can show the model answer
+      this.$('.buttons-action').a11y_cntrl_enabled(true);
+
+      this.$('.openTextInput-action-button').html(buttonText);
     },
 
     showCorrectAnswer: function() {
-      this.$('.buttons-action').a11y_cntrl_enabled(true);
       this.model.set('_buttonState', 'hideCorrectAnswer');
       this.updateActionButton(this.model.get('_buttons').showUserAnswer);
 
@@ -156,7 +170,6 @@ define(function(require) {
     },
 
     hideCorrectAnswer: function() {
-      this.$('.buttons-action').a11y_cntrl_enabled(true);
       this.model.set('_buttonState', 'showCorrectAnswer');
       this.updateActionButton(this.model.get('_buttons').showModelAnswer);
 
@@ -176,8 +189,8 @@ define(function(require) {
     },
 
     /**
-    * Used by adapt-contrib-spoor to get the user's answers in the format required by the cmi.interactions.n.student_response data field
-    */
+     * Used by adapt-contrib-spoor to get the user's answers in the format required by the cmi.interactions.n.student_response data field
+     */
     getResponse: function() {
       var userAnswer = this.model.get('_userAnswer') || '';
 
@@ -185,10 +198,10 @@ define(function(require) {
     },
 
     /**
-    * Used by adapt-contrib-spoor to get the type of this question in the format required by the cmi.interactions.n.type data field
-    */ 
+     * Used by adapt-contrib-spoor to get the type of this question in the format required by the cmi.interactions.n.type data field
+     */
     getResponseType: function() {
-        return "fill-in";
+      return "long-fill-in";
     }
   });
 
