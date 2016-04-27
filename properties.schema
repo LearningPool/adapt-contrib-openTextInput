@@ -7,7 +7,7 @@
     "placeholder": {
       "type":"string",
       "required":false,
-      "default": "",
+      "default": "Enter your answer here",
       "title": "Placeholder",
       "inputType": "Text",
       "validators": [],
@@ -25,7 +25,7 @@
     "remainingCharactersText": {
       "type":"string",
       "required":true,
-      "default": "",
+      "default": "Remaining characters",
       "title": "Characters remaining",
       "inputType": "Text",
       "validators": ["required"],
