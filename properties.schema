@@ -1,12 +1,20 @@
 {
-  "type":"object",
+  "type": "object",
   "$schema": "http://json-schema.org/draft-04/schema",
   "id": "http://jsonschema.net",
   "$ref": "http://localhost/plugins/content/component/model.schema",
-  "properties":{
+  "properties": {
+    "instruction": {
+      "type": "string",
+      "required": false,
+      "default": "",
+      "inputType": "Text",
+      "validators": [],
+      "help": "This is the instruction text"
+    },
     "placeholder": {
-      "type":"string",
-      "required":false,
+      "type": "string",
+      "required": false,
       "default": "Enter your answer here",
       "title": "Placeholder",
       "inputType": "Text",
@@ -14,17 +22,17 @@
       "help": "This is the placeholder text which will be displayed inside the textarea"
     },
     "_allowedCharacters": {
-      "type":"number",
-      "required":true,
-      "default":500,
+      "type": "number",
+      "required": true,
+      "default": 500,
       "title": "Allowed characters",
-      "inputType":"Number",
+      "inputType": "Number",
       "validators": ["required", "number"],
       "help": "The maximum number of characters that the user may enter"
     },
     "remainingCharactersText": {
-      "type":"string",
-      "required":true,
+      "type": "string",
+      "required": true,
       "default": "Remaining characters",
       "title": "Characters remaining",
       "inputType": "Text",
@@ -32,8 +40,8 @@
       "help": "Label for the count of remaining characters"
     },
     "characterCountText": {
-      "type":"string",
-      "required":true,
+      "type": "string",
+      "required": true,
       "default": "",
       "title": "Character count",
       "inputType": "Text",
@@ -41,17 +49,17 @@
       "help": "Label for the count of characters entered"
     },
     "_numberOfRows": {
-      "type":"integer",
-      "required":true,
+      "type": "integer",
+      "required": true,
       "default": 3,
       "title": "Number of rows",
-      "inputType":"Number",
+      "inputType": "Number",
       "validators": ["required", "number"],
       "help": "The number textarea rows"
     },
     "_recordInteraction": {
-      "type":"boolean",
-      "required":false,
+      "type": "boolean",
+      "required": false,
       "default": false,
       "title": "Record interaction",
       "inputType": {"type": "Boolean", "options": [true, false]},
@@ -59,8 +67,8 @@
       "help": "If set to 'true', the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
     },
     "modelAnswer": {
-      "type":"string",
-      "required":true,
+      "type": "string",
+      "required": true,
       "default": "",
       "title": "Model answer",
       "inputType": "TextArea",
@@ -68,8 +76,8 @@
       "help": "This is the model answer which will be displayed when the model answer button is clicked"
     },
     "savedMessage": {
-      "type":"string",
-      "required":true,
+      "type": "string",
+      "required": true,
       "default": "Changes saved",
       "title": "Saved message",
       "inputType": "Text",
@@ -77,7 +85,7 @@
       "help": "This is the message displayed to the user when the text is saved"
     },
     "_buttons": {
-      "type":"object",
+      "type": "object",
       "title": "Buttons",
       "required": false,
       "properties":{
@@ -99,14 +107,14 @@
               "required": false,
               "default": "Submit",
               "title": "",
-              "inputType": "Text",
+              "inputType": "QuestionButton",
               "validators": [],
               "help": "Aria label for the submit button"
             }
           }
         },
         "_showCorrectAnswer": {
-          "type":"object",
+          "type": "object",
           "title": "Show Correct Answer",
           "properties":{
             "buttonText": {
@@ -119,18 +127,18 @@
               "help": "Button label text to show the model answer"
             },
             "ariaLabel": {
-              "type":"string",
+              "type": "string",
               "required": false,
               "default": "Show model answer",
               "title": "",
-              "inputType": "Text",
+              "inputType": "QuestionButton",
               "validators": [],
               "help": "Aria label for the show model answer button"
             }
           }
         },
         "_hideCorrectAnswer": {
-          "type":"object",
+          "type": "object",
           "title": "Hide Correct Answer",
           "properties":{
             "buttonText": {
@@ -147,14 +155,14 @@
               "required": false,
               "default": "Hide model answer",
               "title": "",
-              "inputType": "Text",
+              "inputType": "QuestionButton",
               "validators": [],
               "help": "Aria label for the hide model answer button"
             }
           }
         },
         "_showFeedback": {
-          "type":"object",
+          "type": "object",
           "title": "Show Feedback",
           "properties": {
             "buttonText": {
@@ -171,14 +179,14 @@
               "required": false,
               "default": "",
               "title": "",
-              "inputType": "Text",
+              "inputType": "QuestionButton",
               "validators": [],
               "help": "Aria label for the show feedback button"
             }
           }
         },
         "_reset": {
-          "type":"object",
+          "type": "object",
           "title": "Reset",
           "properties":{
             "buttonText": {
@@ -195,7 +203,7 @@
               "required": false,
               "default": "Reset",
               "title": "",
-              "inputType": "Text",
+              "inputType": "QuestionButton",
               "validators": [],
               "help": "Aria label for the reset button"
             }
