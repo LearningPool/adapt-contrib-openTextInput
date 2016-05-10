@@ -34,19 +34,10 @@
       "type": "string",
       "required": true,
       "default": "Remaining characters",
-      "title": "Characters remaining",
+      "title": "character(s) remaining",
       "inputType": "Text",
       "validators": ["required"],
       "help": "Label for the count of remaining characters"
-    },
-    "characterCountText": {
-      "type": "string",
-      "required": true,
-      "default": "",
-      "title": "Character count",
-      "inputType": "Text",
-      "validators": ["required"],
-      "help": "Label for the count of characters entered"
     },
     "_numberOfRows": {
       "type": "integer",
