@@ -37,6 +37,13 @@ define(function(require) {
 
     canSubmit: function() {
       var answer = this.$textbox.val();
+
+      if (typeof String.prototype.trim !== 'function') {
+        String.prototype.trim = function() {
+          return this.replace(/^\s+|\s+$/g, '');
+        }
+      }
+
       return answer && answer.trim() !== '';
     },
 
