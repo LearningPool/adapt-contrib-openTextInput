@@ -39,15 +39,6 @@
       "validators": ["required"],
       "help": "Label for the count of remaining characters"
     },
-    "_numberOfRows": {
-      "type": "integer",
-      "required": true,
-      "default": 3,
-      "title": "Number of rows",
-      "inputType": "Number",
-      "validators": ["required", "number"],
-      "help": "The number textarea rows"
-    },
     "_recordInteraction": {
       "type": "boolean",
       "required": false,

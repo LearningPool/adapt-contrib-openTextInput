@@ -81,16 +81,24 @@
         }
 
     }
+    .hide-openTextInput-modelanswer {
+        position: absolute;
+        visibility: hidden;
+    }
+    .show-openTextInput-modelanswer {
+        position: relative;
+        visibility: visible;
+    }
     .openTextInput-inner {
         .openTextInput-widget {
             .openTextInput-item-textbox {
                 &.openTextInput-item-modelanswer {
-                background-color: #fff;
-                max-height: none;
-                    p {
-                        margin: 16px;
-                    }
-                }
+                    background-color: #fff;
+                    max-height: none;
+                        p {
+                            margin: 16px;
+                        }
+                }    
             }
         }
     }

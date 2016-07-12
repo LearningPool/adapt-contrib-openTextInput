@@ -54,8 +54,9 @@ define(function(require) {
     onQuestionRendered: function() {
       this.listenTo(this.buttonsView, 'buttons:submit', this.onActionClicked);
 
-      this.$textbox = this.$('.openTextInput-item-textbox');
-      this.$countChars = this.$('.openTextInput-count-characters');
+      this.$textbox = this.$('textarea.openTextInput-item-textbox');
+      this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
+      this.$countChars = this.$('.openTextInput-count-characters-container');
 
       this.$autosave = this.$('.openTextInput-autosave');
       this.$autosave.text(this.model.get('savedMessage'));
@@ -144,6 +145,7 @@ define(function(require) {
 
     onActionClicked: function(event) {
       if (this.model.get('_isComplete')) {
+        this.onCompleteChanged();
         // Keep the action button enabled so we can show the model answer
         this.$('.buttons-action').a11y_cntrl_enabled(true);
 
@@ -162,18 +164,36 @@ define(function(require) {
       this.$('.openTextInput-action-button').html(buttonText);
     },
 
+    preRender: function() {
+      var modelAnswer = this.model.get('modelAnswer');
+      modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
+
+      this.model.set('modelAnswer', modelAnswer);
+
+      if (this.model.get('_isComplete')) {
+        this.model.set('_buttonState', 'showCorrectAnswer');
+      } else {
+        this.model.set('_buttonState', 'submit');
+      }
+    },
+
+    postRender: function() {
+      // Set the height of the textarea to the height of the model answer.
+      // This creates a smoother user experience
+      this.$('.openTextInput-item-textbox').height(this.$('.openTextInput-item-modelanswer').height());
+      this.$('.openTextInput-item-modelanswer').addClass('hide-openTextInput-modelanswer');
+      this.$('.openTextInput-count-characters').height(this.$('.openTextInput-count-characters').height());
+
+      QuestionView.prototype.postRender.call(this);
+    },
+
     showCorrectAnswer: function() {
       this.model.set('_buttonState', 'hideCorrectAnswer');
       this.updateActionButton(this.model.get('_buttons').showUserAnswer);
 
-      var modelAnswer = this.model.get('modelAnswer');
-      modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
-      modelAnswer = '<div class="openTextInput-item-modelanswer openTextInput-item-textbox">' + modelAnswer + '</div>';
-
       this.$textbox.hide();
       this.$countChars.hide();
-
-      this.$textbox.after(modelAnswer);
+      this.$modelAnswer.addClass('show-openTextInput-modelanswer').removeClass('hide-openTextInput-modelanswer');
     },
 
     hideCorrectAnswer: function() {
@@ -181,18 +201,17 @@ define(function(require) {
       this.updateActionButton(this.model.get('_buttons').showModelAnswer);
 
       if (this.$textbox === undefined) {
-        this.$textbox = this.$('.openTextInput-item-textbox');
+        this.$textbox = this.$('textarea.openTextInput-item-textbox');
       }
 
       this.$textbox.val(this.model.get('_userAnswer')).show();
 
       if (this.$countChars === undefined) {
-        this.$countChars = this.$('.openTextInput-count-characters');
+        this.$countChars = this.$('.openTextInput-count-characters-container');
       }
 
       this.$countChars.show();
-
-      this.$('.openTextInput-item-modelanswer').remove();
+      this.$modelAnswer.addClass('hide-openTextInput-modelanswer').removeClass('show-openTextInput-modelanswer');
     },
 
     /**

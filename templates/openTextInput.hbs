@@ -3,7 +3,7 @@
   {{> component this}}
   <div class="component-widget openTextInput-widget">
     <div class="openTextInput-count-characters">
-      <span class="openTextInput-count-amount"></span>&nbsp;{{remainingCharactersText}}
+      <div class="openTextInput-count-characters-container"><span class="openTextInput-count-amount"></span>&nbsp;{{remainingCharactersText}}</div>
       <div class="openTextInput-autosave"></div>
     </div>
 
@@ -12,6 +12,7 @@
                   rows={{_numberOfRows}} placeholder="{{placeholder}}"
                   maxlength="{{_allowedCharacters}}">{{_userAnswer}}</textarea>
     </div>
+    <div class="openTextInput-item-modelanswer openTextInput-item-textbox">{{{modelAnswer}}}</div>
     <div class="buttons">
     </div>
   </div>
