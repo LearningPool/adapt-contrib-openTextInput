@@ -29,6 +29,17 @@ define(function(require) {
           this.model.set('_userAnswer', userAnswer);
         }
       }
+
+      var modelAnswer = this.model.get('modelAnswer');
+      modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
+
+      this.model.set('modelAnswer', modelAnswer);
+
+      if (this.model.get('_isComplete')) {
+        this.model.set('_buttonState', 'showCorrectAnswer');
+      } else {
+        this.model.set('_buttonState', 'submit');
+      }
     },
 
     onCompleteChanged: function() {
@@ -162,19 +173,6 @@ define(function(require) {
       this.$('.buttons-action').a11y_cntrl_enabled(true);
 
       this.$('.openTextInput-action-button').html(buttonText);
-    },
-
-    preRender: function() {
-      var modelAnswer = this.model.get('modelAnswer');
-      modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
-
-      this.model.set('modelAnswer', modelAnswer);
-
-      if (this.model.get('_isComplete')) {
-        this.model.set('_buttonState', 'showCorrectAnswer');
-      } else {
-        this.model.set('_buttonState', 'submit');
-      }
     },
 
     postRender: function() {
