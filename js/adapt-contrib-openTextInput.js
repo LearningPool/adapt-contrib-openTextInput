@@ -145,7 +145,13 @@ define(function(require) {
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
 
       if (this.supportsHtml5Storage()) {
-        localStorage.setItem(identifier, this.model.get('_userAnswer'));
+        // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
+        // report as being able to support localStorage but fail when setItem() is called.
+        try {
+          localStorage.setItem(identifier, this.model.get('_userAnswer'));
+        } catch (e) {
+          console.log('ERROR: HTML5 localStorage.setItem() failed! Unable to save user answer.');
+        }
       }
 
       this.model.set('_isSaved', true);
