@@ -1,6 +1,6 @@
 {
   "name": "adapt-contrib-openTextInput",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A question component that allows the learner to input open text based upon a question stem",
   "main": "",
   "scripts": {
