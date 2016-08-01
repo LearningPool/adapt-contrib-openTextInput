@@ -20,8 +20,8 @@ define(function(require) {
     setupQuestion: function() {
       this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
 
+      // Open Text Input cannot show feedback.
       this.model.set('_canShowFeedback', false);
-      this.model.set('_canShowModelAnswer', true);
 
       if (!this.model.get('_userAnswer')) {
         var userAnswer = this.getUserAnswer();
@@ -36,14 +36,32 @@ define(function(require) {
       this.model.set('modelAnswer', modelAnswer);
 
       if (this.model.get('_isComplete')) {
-        this.model.set('_buttonState', 'showCorrectAnswer');
+        
+        if (this.model.get('_canShowModelAnswer')) {
+          this.model.set('_buttonState', 'showCorrectAnswer');
+        } else {
+          this.model.set('_buttonState', 'correct');
+        }
       } else {
         this.model.set('_buttonState', 'submit');
       }
     },
 
-    onCompleteChanged: function() {
-      this.$textbox.prop('disabled', this.model.get('_isComplete'));
+    onCompleteChanged: function(model, isComplete) {
+      this.$textbox.prop('disabled', isComplete);
+
+      if (isComplete) {
+        if (model.get('_canShowModelAnswer')) {
+          // Keep the action button enabled so we can show the model answer.
+          this.$('.buttons-action').a11y_cntrl_enabled(true);
+
+          if (model.get('_buttonState') == 'correct') {
+            this.model.set('_buttonState', 'showCorrectAnswer');
+          } else {
+            this.model.set('_buttonState', 'hideCorrectAnswer');
+          }
+        }  
+      }
     },
 
     canSubmit: function() {
@@ -77,7 +95,13 @@ define(function(require) {
       this.countCharacters();
       this.setReadyStatus();
 
-      this.onCompleteChanged();
+      if (this.model.get('_isComplete') && !this.model.get('_canShowModelAnswer')) {
+        // Model answer has been disabled.
+        // Force setting the correct/submitted state.
+        this.model.set('_buttonState', 'correct');
+        this.$('.buttons-action').a11y_cntrl_enabled(false);
+        this.$textbox.prop('disabled', true);
+      }
     },
 
     getUserAnswer: function() {
@@ -162,15 +186,7 @@ define(function(require) {
 
     onActionClicked: function(event) {
       if (this.model.get('_isComplete')) {
-        this.onCompleteChanged();
-        // Keep the action button enabled so we can show the model answer
-        this.$('.buttons-action').a11y_cntrl_enabled(true);
-
-        if (this.model.get('_buttonState') == 'correct') {
-          this.model.set('_buttonState', 'showCorrectAnswer');
-        } else {
-          this.model.set('_buttonState', 'hideCorrectAnswer');
-        }
+        this.onCompleteChanged(this.model, true);
       }
     },
 
@@ -206,6 +222,10 @@ define(function(require) {
 
       if (this.$textbox === undefined) {
         this.$textbox = this.$('textarea.openTextInput-item-textbox');
+      }
+
+      if (this.$modelAnswer === undefined) {
+        this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
       }
 
       this.$textbox.val(this.model.get('_userAnswer')).show();
