@@ -22,7 +22,6 @@ define(function(require) {
 
       // Open Text Input cannot show feedback.
       this.model.set('_canShowFeedback', false);
-      // this.model.set('_canShowModelAnswer', true);
 
       if (!this.model.get('_userAnswer')) {
         var userAnswer = this.getUserAnswer();
@@ -49,11 +48,10 @@ define(function(require) {
     },
 
     onCompleteChanged: function(model, isComplete) {
-      // var isComplete = model.get('_isComplete');
       this.$textbox.prop('disabled', isComplete);
 
       if (isComplete) {
-      	if (model.get('_canShowModelAnswer')) {
+        if (model.get('_canShowModelAnswer')) {
           // Keep the action button enabled so we can show the model answer.
           this.$('.buttons-action').a11y_cntrl_enabled(true);
 
