@@ -36,7 +36,7 @@ define(function(require) {
       this.model.set('modelAnswer', modelAnswer);
 
       if (this.model.get('_isComplete')) {
-        
+
         if (this.model.get('_canShowModelAnswer')) {
           this.model.set('_buttonState', 'showCorrectAnswer');
         } else {
@@ -60,7 +60,7 @@ define(function(require) {
           } else {
             this.model.set('_buttonState', 'hideCorrectAnswer');
           }
-        }  
+        }
       }
     },
 
@@ -251,7 +251,7 @@ define(function(require) {
      * Used by adapt-contrib-spoor to get the type of this question in the format required by the cmi.interactions.n.type data field
      */
     getResponseType: function() {
-      return "long-fill-in";
+      return "fill-in";
     }
   });
 
