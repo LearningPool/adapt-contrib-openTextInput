@@ -36,7 +36,6 @@ define(function(require) {
       this.model.set('modelAnswer', modelAnswer);
 
       if (this.model.get('_isComplete')) {
-        
         if (this.model.get('_canShowModelAnswer')) {
           this.model.set('_buttonState', 'showCorrectAnswer');
         } else {
@@ -45,6 +44,19 @@ define(function(require) {
       } else {
         this.model.set('_buttonState', 'submit');
       }
+
+      // Some shim code to handle old/missing JSON.
+      var buttons = this.model.get('_buttons');
+
+      if (buttons['_hideCorrectAnswer'] == undefined) {
+        buttons._hideCorrectAnswer = buttons._showUserAnswer || 'Show User Answer';
+      }
+
+      if (buttons['_showCorrectAnswer'] == undefined) {
+        buttons._showCorrectAnswer = buttons._showModelAnswer || 'Show Model Answer'
+      }
+
+      this.model.set('_buttons', buttons);
     },
 
     onCompleteChanged: function(model, isComplete) {
