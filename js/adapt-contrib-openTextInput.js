@@ -72,7 +72,7 @@ define(function(require) {
           } else {
             this.model.set('_buttonState', 'hideCorrectAnswer');
           }
-        }  
+        }
       }
     },
 
@@ -263,7 +263,7 @@ define(function(require) {
      * Used by adapt-contrib-spoor to get the type of this question in the format required by the cmi.interactions.n.type data field
      */
     getResponseType: function() {
-      return "long-fill-in";
+      return "fill-in";
     }
   });
 
