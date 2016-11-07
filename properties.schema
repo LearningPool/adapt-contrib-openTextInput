@@ -10,7 +10,8 @@
       "default": "",
       "inputType": "Text",
       "validators": [],
-      "help": "This is the instruction text"
+      "help": "This is the instruction text",
+      "translatable": true
     },
     "_canShowModelAnswer" : {
       "type" : "boolean",
@@ -49,7 +50,8 @@
       "title": "Placeholder",
       "inputType": "Text",
       "validators": [],
-      "help": "This is the placeholder text which will be displayed inside the textarea"
+      "help": "This is the placeholder text which will be displayed inside the textarea",
+      "translatable": true
     },
     "_allowedCharacters": {
       "type": "number",
@@ -67,7 +69,8 @@
       "title": "character(s) remaining",
       "inputType": "Text",
       "validators": ["required"],
-      "help": "Label for the count of remaining characters"
+      "help": "Label for the count of remaining characters",
+      "translatable": true
     },
     "_recordInteraction": {
       "type": "boolean",
@@ -85,7 +88,8 @@
       "title": "Model answer",
       "inputType": "TextArea",
       "validators": ["required"],
-      "help": "This is the model answer which will be displayed when the model answer button is clicked"
+      "help": "This is the model answer which will be displayed when the model answer button is clicked",
+      "translatable": true
     },
     "savedMessage": {
       "type": "string",
@@ -94,7 +98,8 @@
       "title": "Saved message",
       "inputType": "Text",
       "validators": [],
-      "help": "This is the message displayed to the user when the text is saved"
+      "help": "This is the message displayed to the user when the text is saved",
+      "translatable": true
     },
     "_buttons": {
       "type": "object",
@@ -112,7 +117,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Button label text for the submit button"
+              "help": "Button label text for the submit button",
+              "translatable": true
             },
             "ariaLabel": {
               "type":"string",
@@ -121,7 +127,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Aria label for the submit button"
+              "help": "Aria label for the submit button",
+              "translatable": true
             }
           }
         },
@@ -136,7 +143,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Button label text to show the model answer"
+              "help": "Button label text to show the model answer",
+              "translatable": true
             },
             "ariaLabel": {
               "type": "string",
@@ -145,7 +153,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Aria label for the show model answer button"
+              "help": "Aria label for the show model answer button",
+              "translatable": true
             }
           }
         },
@@ -160,7 +169,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Button label text to hide the model answer"
+              "help": "Button label text to hide the model answer",
+              "translatable": true
             },
             "ariaLabel": {
               "type":"string",
@@ -169,7 +179,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Aria label for the hide model answer button"
+              "help": "Aria label for the hide model answer button",
+              "translatable": true
             }
           }
         },
@@ -184,7 +195,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Button label text to show feedback"
+              "help": "Button label text to show feedback",
+              "translatable": true
             },
             "ariaLabel": {
               "type": "string",
@@ -193,7 +205,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Aria label for the show feedback button"
+              "help": "Aria label for the show feedback button",
+              "translatable": true
             }
           }
         },
@@ -208,7 +221,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Button label text for the reset button"
+              "help": "Button label text for the reset button",
+              "translatable": true
             },
             "ariaLabel": {
               "type":"string",
@@ -217,7 +231,8 @@
               "title": "",
               "inputType": "QuestionButton",
               "validators": [],
-              "help": "Aria label for the reset button"
+              "help": "Aria label for the reset button",
+              "translatable": true
             }
           }
         }
