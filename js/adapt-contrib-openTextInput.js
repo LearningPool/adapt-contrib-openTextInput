@@ -17,11 +17,23 @@ define(function(require) {
       'keyup .openTextInput-item-textbox': 'onKeyUpTextarea'
     },
 
+    formatPlaceholder() {
+      // Replace quote marks in placholder.
+      var placeholder = this.model.get('placeholder') || '';
+      
+      placeholder = placeholder.replace(/"/g, "'");
+
+      this.model.set('placeholder', placeholder);
+    },
+
     setupQuestion: function() {
       this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
 
       // Open Text Input cannot show feedback.
       this.model.set('_canShowFeedback', false);
+
+
+      this.formatPlaceholder();
 
       if (!this.model.get('_userAnswer')) {
         var userAnswer = this.getUserAnswer();
