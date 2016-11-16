@@ -17,7 +17,7 @@ define(function(require) {
       'keyup .openTextInput-item-textbox': 'onKeyUpTextarea'
     },
 
-    formatPlaceholder() {
+    formatPlaceholder: function() {
       // Replace quote marks in placholder.
       var placeholder = this.model.get('placeholder') || '';
       
