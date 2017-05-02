@@ -6,10 +6,11 @@
  * Barry McKay <barry@learningpool.com>
  */
 
-define(function(require) {
-
-  var QuestionView = require('coreViews/questionView');
-  var Adapt = require('coreJS/adapt');
+define([
+  'core/js/adapt',
+  'core/js/views/questionView',
+  'core/js/enums/buttonStateEnum'
+], function(Adapt, QuestionView, BUTTON_STATE) {
 
   var OpenTextInput = QuestionView.extend({
 
@@ -43,18 +44,18 @@ define(function(require) {
       }
 
       var modelAnswer = this.model.get('modelAnswer');
-      modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
+      modelAnswer = modelAnswer ? modelAnswer.replace(/\\n|&#10;/g, "\n") : '';
 
       this.model.set('modelAnswer', modelAnswer);
 
       if (this.model.get('_isComplete')) {
         if (this.model.get('_canShowModelAnswer')) {
-          this.model.set('_buttonState', 'showCorrectAnswer');
+          this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
         } else {
-          this.model.set('_buttonState', 'correct');
+          this.model.set('_buttonState', BUTTON_STATE.CORRECT);
         }
       } else {
-        this.model.set('_buttonState', 'submit');
+        this.model.set('_buttonState', BUTTON_STATE.SUBMIT);
       }
 
       // Some shim code to handle old/missing JSON.
@@ -79,10 +80,10 @@ define(function(require) {
           // Keep the action button enabled so we can show the model answer.
           this.$('.buttons-action').a11y_cntrl_enabled(true);
 
-          if (model.get('_buttonState') == 'correct') {
-            this.model.set('_buttonState', 'showCorrectAnswer');
+          if (model.get('_buttonState') == BUTTON_STATE.CORRECT) {
+            this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
           } else {
-            this.model.set('_buttonState', 'hideCorrectAnswer');
+            this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
           }
         }
       }
@@ -122,7 +123,7 @@ define(function(require) {
       if (this.model.get('_isComplete') && !this.model.get('_canShowModelAnswer')) {
         // Model answer has been disabled.
         // Force setting the correct/submitted state.
-        this.model.set('_buttonState', 'correct');
+        this.model.set('_buttonState', BUTTON_STATE.CORRECT);
         this.$('.buttons-action').a11y_cntrl_enabled(false);
         this.$textbox.prop('disabled', true);
       }
@@ -232,7 +233,7 @@ define(function(require) {
     },
 
     showCorrectAnswer: function() {
-      this.model.set('_buttonState', 'hideCorrectAnswer');
+      this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
       this.updateActionButton(this.model.get('_buttons').showUserAnswer);
 
       this.$textbox.hide();
@@ -241,7 +242,7 @@ define(function(require) {
     },
 
     hideCorrectAnswer: function() {
-      this.model.set('_buttonState', 'showCorrectAnswer');
+      this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
       this.updateActionButton(this.model.get('_buttons').showModelAnswer);
 
       if (this.$textbox === undefined) {
