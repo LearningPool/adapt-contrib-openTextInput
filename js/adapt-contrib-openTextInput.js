@@ -72,7 +72,7 @@ define([
       this.model.set('_buttons', buttons);
     },
 
-    onCompleteChanged: function(model, isComplete) {
+    onCompleteChanged: function(model, isComplete, buttonState) {
       this.$textbox.prop('disabled', isComplete);
 
       if (isComplete) {
@@ -80,10 +80,13 @@ define([
           // Keep the action button enabled so we can show the model answer.
           this.$('.buttons-action').a11y_cntrl_enabled(true);
 
-          if (model.get('_buttonState') == BUTTON_STATE.CORRECT) {
-            this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
-          } else {
-            this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
+          if (!_.isEmpty(buttonState)) {
+            // Toggle the button.
+            if (buttonState == BUTTON_STATE.CORRECT || buttonState == BUTTON_STATE.HIDE_CORRECT_ANSWER || buttonState == BUTTON_STATE.SUBMIT) {
+              this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
+            } else {
+              this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
+            }
           }
         }
       }
@@ -106,7 +109,7 @@ define([
     },
 
     onQuestionRendered: function() {
-      this.listenTo(this.buttonsView, 'buttons:submit', this.onActionClicked);
+      this.listenTo(this.buttonsView, 'buttons:stateUpdate', this.onActionClicked);
 
       this.$textbox = this.$('textarea.openTextInput-item-textbox');
       this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
@@ -209,9 +212,9 @@ define([
       this.$autosave.delay(1000).animate({opacity: 0});
     },
 
-    onActionClicked: function(event) {
+    onActionClicked: function(buttonState) {
       if (this.model.get('_isComplete')) {
-        this.onCompleteChanged(this.model, true);
+        this.onCompleteChanged(this.model, true, buttonState);
       }
     },
 
