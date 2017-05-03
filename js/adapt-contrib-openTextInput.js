@@ -43,7 +43,7 @@ define(function(require) {
       }
 
       var modelAnswer = this.model.get('modelAnswer');
-      modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
+      modelAnswer = modelAnswer ? modelAnswer.replace(/\\n|&#10;/g, '\n') : '';
 
       this.model.set('modelAnswer', modelAnswer);
 
