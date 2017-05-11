@@ -7,7 +7,8 @@
     "Thomas Eitler <thomas.eitler@learnchamp.com>",
     "Barbara Fellner <me@barbarafellner.at>",
     "Petra Nussdorfer <petra.nussdorfer@learnchamp.com>",
-    "Brian Quinn <brian@learningpool.com>"
+    "Brian Quinn <brian@learningpool.com>",
+    "Barry McKay <barry@learningpool.com>"
   ],
   "description": "A question component that allows the learner to input open text based upon a question stem.",
   "main": "/js/adapt-contrib-openTextInput.js",
