@@ -55,7 +55,7 @@
       "title": "Record interaction",
       "inputType": "Checkbox",
       "validators": [],
-      "help": "If checked, the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
+      "help": "If enabled, the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
     },
     "modelAnswer": {
       "type": "string",
