@@ -6,10 +6,11 @@
  * Barry McKay <barry@learningpool.com>
  */
 
-define(function(require) {
-
-  var QuestionView = require('coreViews/questionView');
-  var Adapt = require('coreJS/adapt');
+define([
+  'core/js/adapt',
+  'core/js/views/questionView',
+  'core/js/enums/buttonStateEnum'
+], function(Adapt, QuestionView, BUTTON_STATE) {
 
   var OpenTextInput = QuestionView.extend({
 
@@ -17,11 +18,23 @@ define(function(require) {
       'keyup .openTextInput-item-textbox': 'onKeyUpTextarea'
     },
 
+    formatPlaceholder: function() {
+      // Replace quote marks in placholder.
+      var placeholder = this.model.get('placeholder') || '';
+      
+      placeholder = placeholder.replace(/"/g, "'");
+
+      this.model.set('placeholder', placeholder);
+    },
+
     setupQuestion: function() {
       this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
 
+      // Open Text Input cannot show feedback.
       this.model.set('_canShowFeedback', false);
-      this.model.set('_canShowModelAnswer', true);
+
+
+      this.formatPlaceholder();
 
       if (!this.model.get('_userAnswer')) {
         var userAnswer = this.getUserAnswer();
@@ -29,14 +42,66 @@ define(function(require) {
           this.model.set('_userAnswer', userAnswer);
         }
       }
+
+      var modelAnswer = this.model.get('modelAnswer');
+
+      modelAnswer = modelAnswer ? modelAnswer.replace(/\\n|&#10;/g, '\n') : '';
+
+      this.model.set('modelAnswer', modelAnswer);
+
+      if (this.model.get('_isComplete')) {
+        if (this.model.get('_canShowModelAnswer')) {
+          this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
+        } else {
+          this.model.set('_buttonState', BUTTON_STATE.CORRECT);
+        }
+      } else {
+        this.model.set('_buttonState', BUTTON_STATE.SUBMIT);
+      }
+
+      // Some shim code to handle old/missing JSON.
+      var buttons = this.model.get('_buttons');
+
+      if (buttons['_hideCorrectAnswer'] == undefined) {
+        buttons._hideCorrectAnswer = buttons._showUserAnswer || 'Show User Answer';
+      }
+
+      if (buttons['_showCorrectAnswer'] == undefined) {
+        buttons._showCorrectAnswer = buttons._showModelAnswer || 'Show Model Answer'
+      }
+
+      this.model.set('_buttons', buttons);
     },
 
-    onCompleteChanged: function() {
-      this.$textbox.prop('disabled', this.model.get('_isComplete'));
+    onCompleteChanged: function(model, isComplete, buttonState) {
+      this.$textbox.prop('disabled', isComplete);
+
+      if (isComplete) {
+        if (model.get('_canShowModelAnswer')) {
+          // Keep the action button enabled so we can show the model answer.
+          this.$('.buttons-action').a11y_cntrl_enabled(true);
+
+          if (!_.isEmpty(buttonState)) {
+            // Toggle the button.
+            if (buttonState == BUTTON_STATE.CORRECT || buttonState == BUTTON_STATE.HIDE_CORRECT_ANSWER || buttonState == BUTTON_STATE.SUBMIT) {
+              this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
+            } else {
+              this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
+            }
+          }
+        }
+      }
     },
 
     canSubmit: function() {
       var answer = this.$textbox.val();
+
+      if (typeof String.prototype.trim !== 'function') {
+        String.prototype.trim = function() {
+          return this.replace(/^\s+|\s+$/g, '');
+        }
+      }
+
       return answer && answer.trim() !== '';
     },
 
@@ -45,10 +110,11 @@ define(function(require) {
     },
 
     onQuestionRendered: function() {
-      this.listenTo(this.buttonsView, 'buttons:submit', this.onActionClicked);
+      this.listenTo(this.buttonsView, 'buttons:stateUpdate', this.onActionClicked);
 
-      this.$textbox = this.$('.openTextInput-item-textbox');
-      this.$countChars = this.$('.openTextInput-count-characters');
+      this.$textbox = this.$('textarea.openTextInput-item-textbox');
+      this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
+      this.$countChars = this.$('.openTextInput-count-characters-container');
 
       this.$autosave = this.$('.openTextInput-autosave');
       this.$autosave.text(this.model.get('savedMessage'));
@@ -58,7 +124,13 @@ define(function(require) {
       this.countCharacters();
       this.setReadyStatus();
 
-      this.onCompleteChanged();
+      if (this.model.get('_isComplete') && !this.model.get('_canShowModelAnswer')) {
+        // Model answer has been disabled.
+        // Force setting the correct/submitted state.
+        this.model.set('_buttonState', BUTTON_STATE.CORRECT);
+        this.$('.buttons-action').a11y_cntrl_enabled(false);
+        this.$textbox.prop('disabled', true);
+      }
     },
 
     getUserAnswer: function() {
@@ -126,7 +198,13 @@ define(function(require) {
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
 
       if (this.supportsHtml5Storage()) {
-        localStorage.setItem(identifier, this.model.get('_userAnswer'));
+        // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
+        // report as being able to support localStorage but fail when setItem() is called.
+        try {
+          localStorage.setItem(identifier, this.model.get('_userAnswer'));
+        } catch (e) {
+          console.log('ERROR: HTML5 localStorage.setItem() failed! Unable to save user answer.');
+        }
       }
 
       this.model.set('_isSaved', true);
@@ -135,16 +213,9 @@ define(function(require) {
       this.$autosave.delay(1000).animate({opacity: 0});
     },
 
-    onActionClicked: function(event) {
+    onActionClicked: function(buttonState) {
       if (this.model.get('_isComplete')) {
-        // Keep the action button enabled so we can show the model answer
-        this.$('.buttons-action').a11y_cntrl_enabled(true);
-
-        if (this.model.get('_buttonState') == 'correct') {
-          this.model.set('_buttonState', 'showCorrectAnswer');
-        } else {
-          this.model.set('_buttonState', 'hideCorrectAnswer');
-        }
+        this.onCompleteChanged(this.model, true, buttonState);
       }
     },
 
@@ -155,37 +226,45 @@ define(function(require) {
       this.$('.openTextInput-action-button').html(buttonText);
     },
 
-    showCorrectAnswer: function() {
-      this.model.set('_buttonState', 'hideCorrectAnswer');
-      this.updateActionButton(this.model.get('_buttons').showUserAnswer);
+    postRender: function() {
+      // Set the height of the textarea to the height of the model answer.
+      // This creates a smoother user experience
+      this.$('.openTextInput-item-textbox').height(this.$('.openTextInput-item-modelanswer').height());
+      this.$('.openTextInput-item-modelanswer').addClass('hide-openTextInput-modelanswer');
+      this.$('.openTextInput-count-characters').height(this.$('.openTextInput-count-characters').height());
 
-      var modelAnswer = this.model.get('modelAnswer');
-      modelAnswer = modelAnswer.replace(/\\n|&#10;/g, "\n");
-      modelAnswer = '<div class="openTextInput-item-modelanswer openTextInput-item-textbox">' + modelAnswer + '</div>';
+      QuestionView.prototype.postRender.call(this);
+    },
+
+    showCorrectAnswer: function() {
+      this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
+      this.updateActionButton(this.model.get('_buttons').showUserAnswer);
 
       this.$textbox.hide();
       this.$countChars.hide();
-
-      this.$textbox.after(modelAnswer);
+      this.$modelAnswer.addClass('show-openTextInput-modelanswer').removeClass('hide-openTextInput-modelanswer');
     },
 
     hideCorrectAnswer: function() {
-      this.model.set('_buttonState', 'showCorrectAnswer');
+      this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
       this.updateActionButton(this.model.get('_buttons').showModelAnswer);
 
       if (this.$textbox === undefined) {
-        this.$textbox = this.$('.openTextInput-item-textbox');
+        this.$textbox = this.$('textarea.openTextInput-item-textbox');
+      }
+
+      if (this.$modelAnswer === undefined) {
+        this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
       }
 
       this.$textbox.val(this.model.get('_userAnswer')).show();
 
       if (this.$countChars === undefined) {
-        this.$countChars = this.$('.openTextInput-count-characters');
+        this.$countChars = this.$('.openTextInput-count-characters-container');
       }
 
       this.$countChars.show();
-
-      this.$('.openTextInput-item-modelanswer').remove();
+      this.$modelAnswer.addClass('hide-openTextInput-modelanswer').removeClass('show-openTextInput-modelanswer');
     },
 
     /**
@@ -201,7 +280,7 @@ define(function(require) {
      * Used by adapt-contrib-spoor to get the type of this question in the format required by the cmi.interactions.n.type data field
      */
     getResponseType: function() {
-      return "long-fill-in";
+      return "fill-in";
     }
   });
 
