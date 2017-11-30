@@ -93,7 +93,7 @@ define([
     },
 
     canSubmit: function() {
-      var answer = this.$textbox.val();
+      var answer = this.model.get('_userAnswer');
 
       if (typeof String.prototype.trim !== 'function') {
         String.prototype.trim = function() {
@@ -300,8 +300,12 @@ define([
       }
 
       // If the component is complete then it must be correct
+        // _isInteractionComplete needs to be set to true so marking is restored correctly
       if (component.get('_isComplete')) {
-        component.set('_isCorrect', true);
+          component.set({
+              _isCorrect: true,
+              _isInteractionComplete: true
+          });
 
         // Add a manual trigger just in case any extensions listening for this change have already loaded
         component.trigger('change:_isComplete', component, true);
