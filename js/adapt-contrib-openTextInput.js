@@ -33,7 +33,6 @@ define([
       // Open Text Input cannot show feedback.
       this.model.set('_canShowFeedback', false);
 
-
       this.formatPlaceholder();
 
       if (!this.model.get('_userAnswer')) {
@@ -285,5 +284,29 @@ define([
   });
 
   Adapt.register('openTextInput', OpenTextInput);
+  
+  Adapt.once('adapt:start', restoreQuestionStatusPolyfill);
+
+    /**
+     * Spoor cannot store text input values and so the completion status of this component does not get
+     * saved or restored properly. This function ensures that the question's completion status is
+     * restored in a way that other extensions e.g. learning objectives can obtain accurate data for processing
+     *
+     */
+  function restoreQuestionStatusPolyfill() {
+    Adapt.components.each(function(component) {
+      if (component.get('_component') !== 'openTextInput') {
+        return;
+      }
+
+      // If the component is complete then it must be correct
+      if (component.get('_isComplete')) {
+        component.set('_isCorrect', true);
+
+        // Add a manual trigger just in case any extensions listening for this change have already loaded
+        component.trigger('change:_isComplete', component, true);
+      }
+    });
+  }
 
 });
