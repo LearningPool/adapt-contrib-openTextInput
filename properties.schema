@@ -25,30 +25,18 @@
       "required" : true,
       "default" : true,
       "title" : "Display Model Answer",
-      "inputType" : {
-        "type" : "Boolean",
-        "options" : [ 
-          true, 
-          false
-        ]
-      },
+      "inputType": "Checkbox",
       "validators" : [],
-      "help" : "Select 'true' to allow the user to view the 'model answer' should they answer the question incorrectly"
+      "help" : "Enable to allow the user to view the 'model answer' should they answer the question incorrectly"
     },
     "_canShowFeedback" : {
       "type" : "boolean",
       "required" : true,
       "default" : false,
       "title" : "Display Feedback",
-      "inputType" : {
-        "type" : "Boolean",
-        "options" : [ 
-          true, 
-          false
-        ]
-      },
+      "inputType": "Checkbox",
       "validators" : [],
-      "help" : "Select 'true' to allow the user to view feedback on their answer"
+      "help" : "Enable to allow the user to view feedback on their answer"
     },
     "placeholder": {
       "type": "string",
@@ -84,9 +72,9 @@
       "required": false,
       "default": false,
       "title": "Record interaction",
-      "inputType": {"type": "Boolean", "options": [true, false]},
+      "inputType": "Checkbox",
       "validators": [],
-      "help": "If set to 'true', the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
+      "help": "If enabled, the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
     },
     "modelAnswer": {
       "type": "string",
