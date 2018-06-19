@@ -283,7 +283,15 @@ define([
      * Used by adapt-contrib-spoor to get the type of this question in the format required by the cmi.interactions.n.type data field
      */
     getResponseType: function() {
-      return "fill-in";
+      return 'fill-in';
+    },
+
+    getInteractionObject: function() {
+      return {
+        correctResponsesPattern: [
+          this.model.get('modelAnswer')
+        ]
+      };
     },
 
     /**
