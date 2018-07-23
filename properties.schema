@@ -76,6 +76,15 @@
       "validators": [],
       "help": "If enabled, the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
     },
+    "_attempts": {
+      "type": "number",
+      "required": true,
+      "default": -1,
+      "title": "Attempts",
+      "inputType": "Number",
+      "validators": ["required", "number"],
+      "help": "How many attempts the learner is allowed"
+    },
     "modelAnswer": {
       "type": "string",
       "required": true,
