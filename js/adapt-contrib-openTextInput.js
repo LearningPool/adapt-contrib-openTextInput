@@ -136,7 +136,7 @@ define([
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
       var userAnswer = '';
 
-      if (this.supportsHtml5Storage() && this.model.get('_isResetOnRevisit') === false) {
+      if (this.supportsHtml5Storage()) {
         userAnswer = localStorage.getItem(identifier);
         if (userAnswer) {
           return userAnswer;
@@ -196,7 +196,7 @@ define([
       // Use unique identifier to avoid collisions with other components
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
 
-      if (this.supportsHtml5Storage() && this.model.get('_isResetOnRevisit')) {
+      if (this.supportsHtml5Storage()) {
         // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
         // report as being able to support localStorage but fail when setItem() is called.
         try {
@@ -280,13 +280,8 @@ define([
      */
     getResponseType: function() {
       return "fill-in";
-    },
-
-    reset: function(type, force) {
-      super.reset(type, force);
-  
-      this.model.set('_userAnswer', '')
     }
+
   });
 
   Adapt.register('openTextInput', OpenTextInput);
