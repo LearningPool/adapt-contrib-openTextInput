@@ -73,7 +73,7 @@
       "title": "character(s) remaining",
       "inputType": "Text",
       "validators": ["required"],
-      "help": "Label for the count of remaining charactersss",
+      "help": "Label for the count of remaining characters",
       "translatable": true
     },
     "_recordInteraction": {
