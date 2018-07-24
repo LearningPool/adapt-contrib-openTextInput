@@ -136,7 +136,7 @@ define([
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
       var userAnswer = '';
 
-      if (this.supportsHtml5Storage()) {
+      if (this.supportsHtml5Storage() && this.model.get('_isResetOnRevisit') === false) {
         userAnswer = localStorage.getItem(identifier);
         if (userAnswer) {
           return userAnswer;

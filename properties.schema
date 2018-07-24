@@ -20,6 +20,14 @@
       "help": "This is the instruction text",
       "translatable": true
     },
+    "_isResetOnRevisit": {
+      "type" : "boolean",
+      "required" : true,
+      "title" : "Reset answer on revisit?",
+      "inputType" : "Checkbox",
+      "validators" : [],
+      "help" : "This will clear the textbox should a user be reattempting the assessment"
+    },
     "_canShowModelAnswer" : {
       "type" : "boolean",
       "required" : true,
@@ -64,7 +72,7 @@
       "title": "character(s) remaining",
       "inputType": "Text",
       "validators": ["required"],
-      "help": "Label for the count of remaining characters",
+      "help": "Label for the count of remaining charactersss",
       "translatable": true
     },
     "_recordInteraction": {
@@ -75,15 +83,6 @@
       "inputType": "Checkbox",
       "validators": [],
       "help": "If enabled, the user's answer(s) will be recorded to cmi.interactions on the LMS (where supported)."
-    },
-    "_attempts": {
-      "type": "number",
-      "required": true,
-      "default": -1,
-      "title": "Attempts",
-      "inputType": "Number",
-      "validators": ["required", "number"],
-      "help": "How many attempts the learner is allowed"
     },
     "modelAnswer": {
       "type": "string",
