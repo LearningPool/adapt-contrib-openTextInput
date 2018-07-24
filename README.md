@@ -62,6 +62,10 @@ This value is the text before the limited or counted characters.
 
 Defines the height of the textarea with numbers starting by 1.
 
+###_attempts
+
+Sets the number of attempts a user is allowed to retry. (-1/0 meaning unlimited)
+
 ####modelAnswer
 
 This value is the best practise answer. The user can compare this answer to his one.
