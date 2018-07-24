@@ -23,6 +23,7 @@
     "_isResetOnRevisit": {
       "type" : "boolean",
       "required" : true,
+      "default" : false,
       "title" : "Reset answer on revisit?",
       "inputType" : "Checkbox",
       "validators" : [],
