@@ -283,7 +283,7 @@ define([
     },
 
     resetQuestion: function() {
-      this.model.set('_userAnser', '');
+      this.model.set('_userAnswer', '');
     }
 
   });
