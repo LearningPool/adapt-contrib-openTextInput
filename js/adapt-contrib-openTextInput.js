@@ -280,6 +280,10 @@ define([
      */
     getResponseType: function() {
       return "fill-in";
+    },
+
+    resetQuestion: function() {
+      this.model.set('_userAnser', '');
     }
 
   });
