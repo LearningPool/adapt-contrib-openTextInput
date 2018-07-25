@@ -62,9 +62,9 @@ This value is the text before the limited or counted characters.
 
 Defines the height of the textarea with numbers starting by 1.
 
-###_attempts
+###_isResetOnRevisit
 
-Sets the number of attempts a user is allowed to retry. (-1/0 meaning unlimited)
+Flag to set whether the text field should be cleared with reset/retry assessment. Default 0
 
 ####modelAnswer
 
@@ -94,7 +94,7 @@ This value is displayed at the submit button.
 
 This value is displayed on the showModelAnswer Button.
 
-#####showUserAnser
+#####showUserAnswer
 
 This value is displayed on the showUserAnswer Button.
 
