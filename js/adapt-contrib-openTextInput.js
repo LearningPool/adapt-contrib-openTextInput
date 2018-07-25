@@ -111,7 +111,10 @@ define([
     onQuestionRendered: function() {
       this.listenTo(this.buttonsView, 'buttons:stateUpdate', this.onActionClicked);
 
-      this.$textbox = this.$('textarea.openTextInput-item-textbox');
+      if (this.$textbox === undefined) {
+        this.$textbox = this.$('textarea.openTextInput-item-textbox');
+      }
+
       this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
       this.$countChars = this.$('.openTextInput-count-characters-container');
 
@@ -136,7 +139,7 @@ define([
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
       var userAnswer = '';
 
-      if (this.supportsHtml5Storage()) {
+      if (this.supportsHtml5Storage() && !this.model.get('_isResetOnRevisit')) {
         userAnswer = localStorage.getItem(identifier);
         if (userAnswer) {
           return userAnswer;
@@ -196,7 +199,7 @@ define([
       // Use unique identifier to avoid collisions with other components
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
 
-      if (this.supportsHtml5Storage()) {
+      if (this.supportsHtml5Storage() && !this.model.get('_isResetOnRevisit')) {
         // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
         // report as being able to support localStorage but fail when setItem() is called.
         try {
@@ -283,17 +286,23 @@ define([
     },
 
     /**
-     * Used by questionView
+     * Used by questionView. Clears the models on Revisit userAnswer so input appears blank
      */
     resetQuestionOnRevisit: function() {
       this.resetQuestion();
     },
 
     /**
-     * Reset the userAnswer on page revisit if configured that way
+     * Used by questionView. Clears the models userAnswer onResetClicked so input appears blank
      */
     resetQuestion: function() {
       this.model.set('_userAnswer', '');
+      
+      if (this.$textbox === undefined) {
+        this.$textbox = this.$('textarea.openTextInput-item-textbox');
+      }
+
+      this.$textbox.val(this.model.get('_userAnswer'));
     }
 
   });
