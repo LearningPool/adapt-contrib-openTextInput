@@ -297,14 +297,13 @@ define([
      */
     resetQuestion: function() {
       this.model.set('_userAnswer', '');
-      
+
       if (this.$textbox === undefined) {
         this.$textbox = this.$('textarea.openTextInput-item-textbox');
       }
 
       this.$textbox.val(this.model.get('_userAnswer'));
     }
-
   });
 
   Adapt.register('openTextInput', OpenTextInput);
