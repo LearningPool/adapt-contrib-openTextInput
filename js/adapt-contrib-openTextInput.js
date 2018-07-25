@@ -282,6 +282,16 @@ define([
       return "fill-in";
     },
 
+    /**
+     * Used by questionView
+     */
+    resetQuestionOnRevisit: function() {
+      this.resetQuestion();
+    },
+
+    /**
+     * Reset the userAnswer on page revisit if configured that way
+     */
     resetQuestion: function() {
       this.model.set('_userAnswer', '');
     }
