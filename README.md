@@ -64,7 +64,7 @@ Defines the height of the textarea with numbers starting by 1.
 
 ###_isResetOnRevisit
 
-Flag to set whether the text field should be cleared with reset/retry assessment. Default 0
+Flag to set whether the text field should be cleared with reset/retry assessment. Default false
 
 ####modelAnswer
 
