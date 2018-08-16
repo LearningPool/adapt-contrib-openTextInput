@@ -20,6 +20,15 @@
       "help": "This is the instruction text",
       "translatable": true
     },
+    "_isResetOnRevisit": {
+      "type" : "boolean",
+      "required" : true,
+      "default" : false,
+      "title" : "Reset answer on revisit?",
+      "inputType" : "Checkbox",
+      "validators" : [],
+      "help" : "This will clear the textbox should a user be reattempting the assessment"
+    },
     "_canShowModelAnswer" : {
       "type" : "boolean",
       "required" : true,
