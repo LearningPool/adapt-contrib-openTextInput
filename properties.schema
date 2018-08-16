@@ -47,6 +47,13 @@
       "validators" : [],
       "help" : "Enable to allow the user to view feedback on their answer"
     },
+    "_canShowMarking": {
+      "type": "boolean",
+      "default": true,
+      "title": "Display Marking",
+      "inputType": "Checkbox",
+      "validators": []
+    },
     "placeholder": {
       "type": "string",
       "required": false,
