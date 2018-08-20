@@ -32,7 +32,6 @@ define([
 
       // Open Text Input cannot show feedback, but may have been set in older courses
       this.model.set('_canShowFeedback', false);
-      // Wildfire feedback falls over if _feedback doesn't exist
       this.model.set('_feedback', {});
 
       this.formatPlaceholder();
