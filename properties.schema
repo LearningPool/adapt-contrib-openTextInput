@@ -38,15 +38,6 @@
       "validators" : [],
       "help" : "Enable to allow the user to view the 'model answer' should they answer the question incorrectly"
     },
-    "_canShowFeedback" : {
-      "type" : "boolean",
-      "required" : true,
-      "default" : false,
-      "title" : "Display Feedback",
-      "inputType": "Checkbox",
-      "validators" : [],
-      "help" : "Enable to allow the user to view feedback on their answer"
-    },
     "_canShowMarking": {
       "type": "boolean",
       "default": true,

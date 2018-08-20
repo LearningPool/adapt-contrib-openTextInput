@@ -30,8 +30,10 @@ define([
     setupQuestion: function() {
       this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
 
-      // Open Text Input cannot show feedback.
+      // Open Text Input cannot show feedback, but may have been set in older courses
       this.model.set('_canShowFeedback', false);
+      // Wildfire feedback falls over if _feedback doesn't exist
+      this.model.set('_feedback', {});
 
       this.formatPlaceholder();
 
