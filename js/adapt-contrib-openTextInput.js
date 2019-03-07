@@ -230,11 +230,18 @@ define([
     },
 
     postRender: function() {
-      // Set the height of the textarea to the height of the model answer.
-      // This creates a smoother user experience
-      this.$('.openTextInput-item-textbox').height(this.$('.openTextInput-item-modelanswer').height());
+      if (this.$('.openTextInput-item-modelanswer').height() <= 0) {
+        this.$('.openTextInput-item-textbox').css('height', 'auto');
+        this.$('.openTextInput-count-characters').css('height', 'auto');
+      }
+      else {
+        // Set the height of the textarea to the height of the model answer.
+        // This creates a smoother user experience
+        this.$('.openTextInput-item-textbox').height(this.$('.openTextInput-item-modelanswer').height());
+        this.$('.openTextInput-count-characters').height(this.$('.openTextInput-count-characters').height());
+      }
+
       this.$('.openTextInput-item-modelanswer').addClass('hide-openTextInput-modelanswer');
-      this.$('.openTextInput-count-characters').height(this.$('.openTextInput-count-characters').height());
 
       QuestionView.prototype.postRender.call(this);
     },
