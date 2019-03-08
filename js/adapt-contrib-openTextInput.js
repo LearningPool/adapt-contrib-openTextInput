@@ -231,8 +231,7 @@ define([
 
     postRender: function() {
       if (this.$('.openTextInput-item-modelanswer').height() <= 0) {
-        this.$('.openTextInput-item-textbox').css('height', 'auto');
-        this.$('.openTextInput-count-characters').css('height', 'auto');
+        this.$('.openTextInput-item-textbox, . openTextInput-count-characters').css('height', 'auto');
       }
       else {
         // Set the height of the textarea to the height of the model answer.
