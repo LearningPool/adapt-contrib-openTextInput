@@ -230,7 +230,7 @@ define([
     },
 
     postRender: function() {
-      if (this.$('.openTextInput-item-modelanswer').height() <= 0) {
+      if (this.$('.openTextInput-item-modelanswer').height() === 0) {
         this.$('.openTextInput-item-textbox, .openTextInput-count-characters').css('height', 'auto');
       }
       else {
