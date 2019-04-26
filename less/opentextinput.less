@@ -22,6 +22,12 @@
     }
     .openTextInput-answer-container {
         border: none;
+
+        input:disabled,
+        textarea:disabled {
+            color: @disabled-color;
+            opacity: 1;
+        }
     }
     .openTextInput-item-textbox {
         border: none;
@@ -103,13 +109,5 @@
                 }    
             }
         }
-    }
-}
-
-.OS-ios {
-    input:disabled,
-    textarea:disabled {
-      color: @disabled-color;
-      opacity: 1;
     }
 }
