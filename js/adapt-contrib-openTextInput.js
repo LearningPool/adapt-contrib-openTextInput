@@ -248,9 +248,9 @@ define([
       this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
       this.updateActionButton(this.model.get('_buttons').showUserAnswer);
 
+      this.$modelAnswer.addClass('show-openTextInput-modelanswer').removeClass('hide-openTextInput-modelanswer');
       this.$textbox.hide();
       this.$countChars.hide();
-      this.$modelAnswer.addClass('show-openTextInput-modelanswer').removeClass('hide-openTextInput-modelanswer');
     },
 
     hideCorrectAnswer: function() {
