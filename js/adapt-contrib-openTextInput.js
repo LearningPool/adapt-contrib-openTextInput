@@ -275,8 +275,6 @@ define([
 
       this.$countChars.show();
       this.$modelAnswer.addClass('hide-openTextInput-modelanswer').removeClass('show-openTextInput-modelanswer');
-
-      this.scrollToTextArea();
     },
 
     scrollToTextArea: function() {
