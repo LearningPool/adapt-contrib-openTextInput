@@ -251,6 +251,8 @@ define([
       this.$textbox.hide();
       this.$countChars.hide();
       this.$modelAnswer.addClass('show-openTextInput-modelanswer').removeClass('hide-openTextInput-modelanswer');
+
+      this.scrollToTextArea();
     },
 
     hideCorrectAnswer: function() {
@@ -273,6 +275,14 @@ define([
 
       this.$countChars.show();
       this.$modelAnswer.addClass('hide-openTextInput-modelanswer').removeClass('show-openTextInput-modelanswer');
+    },
+
+    scrollToTextArea: function() {
+      // Smooth scroll to top of TextArea
+      Adapt.scrollTo(this.$('.openTextInput-widget'), {
+        duration: 400,
+        offset: -parseInt($('#wrapper').css('padding-top'))
+      });
     },
 
     /**
