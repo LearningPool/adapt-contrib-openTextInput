@@ -1,6 +1,24 @@
 /* Opera/IE 8+ */
 
 .openTextInput-component {
+    .openTextInput-widget {
+        &.submitted {
+            textarea {
+                display: none;
+            }
+
+            .openTextInput-item-answertext {
+                display: block;
+            }
+
+            .show-correct-answer {
+                .openTextInput-count-characters-container {
+                    display: none;
+                }
+            }
+        }
+    }
+
     .openTextInput-count-characters {
         background: @primary-color;
         color: @white;
@@ -32,7 +50,23 @@
         padding: 1%;
         resize: none;
         width: 98%;
+
+        &.openTextInput-item-answertext {
+            background-color: #fff;
+            display: none;
+            max-height: none;
+            overflow: auto;
+
+            &:focus {
+                outline: @focus-outline;
+            }
+
+            p {
+                margin: 16px;
+            }
+        }
     }
+
     .buttons {
         font-size: 0;
         margin-left: auto;
@@ -82,26 +116,5 @@
             }
         }
 
-    }
-    .hide-openTextInput-modelanswer {
-        display: none;
-        position: absolute;
-    }
-    .show-openTextInput-modelanswer {
-        display: block;
-        position: relative;
-    }
-    .openTextInput-inner {
-        .openTextInput-widget {
-            .openTextInput-item-textbox {
-                &.openTextInput-item-modelanswer {
-                    background-color: #fff;
-                    max-height: none;
-                        p {
-                            margin: 16px;
-                        }
-                }    
-            }
-        }
     }
 }

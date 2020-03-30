@@ -15,14 +15,14 @@ define([
   var OpenTextInput = QuestionView.extend({
 
     events: {
-      'keyup .openTextInput-item-textbox': 'onKeyUpTextarea'
+      'keyup textarea': 'onKeyUpTextarea'
     },
 
     formatPlaceholder: function() {
       // Replace quote marks in placholder.
       var placeholder = this.model.get('placeholder') || '';
-      
-      placeholder = placeholder.replace(/"/g, "'");
+
+      placeholder = placeholder.replace(/"/g, '\'');
 
       this.model.set('placeholder', placeholder);
     },
@@ -66,7 +66,7 @@ define([
       }
 
       if (buttons['_showCorrectAnswer'] == undefined) {
-        buttons._showCorrectAnswer = buttons._showModelAnswer || 'Show Model Answer'
+        buttons._showCorrectAnswer = buttons._showModelAnswer || 'Show Model Answer';
       }
 
       this.model.set('_buttons', buttons);
@@ -74,22 +74,19 @@ define([
 
     onCompleteChanged: function(model, isComplete, buttonState) {
       this.$textbox.prop('disabled', isComplete);
+      this.$answer.html(model.get('_userAnswer').replace(/\n/g, '<br>'));
 
-      if (isComplete) {
-        if (model.get('_canShowModelAnswer')) {
-          // Keep the action button enabled so we can show the model answer.
-          this.$('.buttons-action').a11y_cntrl_enabled(true);
+      if (!isComplete || !model.get('_canShowModelAnswer') || _.isEmpty(buttonState)) return;
 
-          if (!_.isEmpty(buttonState)) {
-            // Toggle the button.
-            if (buttonState == BUTTON_STATE.CORRECT || buttonState == BUTTON_STATE.HIDE_CORRECT_ANSWER || buttonState == BUTTON_STATE.SUBMIT) {
-              this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
-            } else {
-              this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
-            }
-          }
-        }
+      // Toggle the button.
+      if (buttonState == BUTTON_STATE.CORRECT || buttonState == BUTTON_STATE.HIDE_CORRECT_ANSWER || buttonState == BUTTON_STATE.SUBMIT) {
+        model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
+      } else {
+        model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
       }
+
+      // Keep the action button enabled so we can show the model answer.
+      this.$('.buttons-action').a11y_cntrl_enabled(true);
     },
 
     canSubmit: function() {
@@ -98,7 +95,7 @@ define([
       if (typeof String.prototype.trim !== 'function') {
         String.prototype.trim = function() {
           return this.replace(/^\s+|\s+$/g, '');
-        }
+        };
       }
 
       return answer && answer.trim() !== '';
@@ -109,10 +106,15 @@ define([
     },
 
     onQuestionRendered: function() {
+      // Set the height of the textarea to the height of the model answer.
+      // This creates a smoother user experience
+      this.$('.openTextInput-item-textbox').height(this.$('.openTextInput-item-answertext').height());
+      this.$('.openTextInput-count-characters').height(this.$('.openTextInput-count-characters').height());
+
       this.listenTo(this.buttonsView, 'buttons:stateUpdate', this.onActionClicked);
 
       this.$textbox = this.$('textarea.openTextInput-item-textbox');
-      this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
+      this.$answer = this.$('.openTextInput-item-answertext');
       this.$countChars = this.$('.openTextInput-count-characters-container');
 
       this.$autosave = this.$('.openTextInput-autosave');
@@ -123,12 +125,8 @@ define([
       this.countCharacters();
       this.setReadyStatus();
 
-      if (this.model.get('_isComplete') && !this.model.get('_canShowModelAnswer')) {
-        // Model answer has been disabled.
-        // Force setting the correct/submitted state.
-        this.model.set('_buttonState', BUTTON_STATE.CORRECT);
-        this.$('.buttons-action').a11y_cntrl_enabled(false);
-        this.$textbox.prop('disabled', true);
+      if (this.model.get('_isComplete')) {
+        this.hideCorrectAnswer();
       }
     },
 
@@ -208,12 +206,12 @@ define([
 
       this.model.set('_isSaved', true);
 
-      this.$autosave.css({opacity: 100});
-      this.$autosave.delay(1000).animate({opacity: 0});
+      this.$autosave.css({ opacity: 100 });
+      this.$autosave.delay(1000).animate({ opacity: 0 });
     },
 
     onActionClicked: function(buttonState) {
-      if (this.model.get('_isComplete')) {
+      if (buttonState === BUTTON_STATE.SUBMIT) {
         this.onCompleteChanged(this.model, true, buttonState);
       }
     },
@@ -236,34 +234,24 @@ define([
     },
 
     showCorrectAnswer: function() {
-      this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
-      this.updateActionButton(this.model.get('_buttons').showUserAnswer);
-
-      this.$textbox.hide();
-      this.$countChars.hide();
-      this.$modelAnswer.addClass('show-openTextInput-modelanswer').removeClass('hide-openTextInput-modelanswer');
+      this.toggleAnswer(BUTTON_STATE.HIDE_CORRECT_ANSWER, 'showUserAnswer', 'modelAnswer');
     },
 
     hideCorrectAnswer: function() {
-      this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
-      this.updateActionButton(this.model.get('_buttons').showModelAnswer);
+      this.toggleAnswer(BUTTON_STATE.SHOW_CORRECT_ANSWER, 'showModelAnswer', '_userAnswer');
+    },
 
-      if (this.$textbox === undefined) {
-        this.$textbox = this.$('textarea.openTextInput-item-textbox');
+    toggleAnswer: function(buttonState, buttonKey, answerKey) {
+      this.model.set('_buttonState', buttonState);
+      this.updateActionButton(buttonKey);
+
+      // Replace any line breaks in order to display text as user typed it
+      var answerText = this.model.get(answerKey).replace(/\n/g, '<br>');
+
+      if (!this.$answer) {
+        return;
       }
-
-      if (this.$modelAnswer === undefined) {
-        this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
-      }
-
-      this.$textbox.val(this.model.get('_userAnswer')).show();
-
-      if (this.$countChars === undefined) {
-        this.$countChars = this.$('.openTextInput-count-characters-container');
-      }
-
-      this.$countChars.show();
-      this.$modelAnswer.addClass('hide-openTextInput-modelanswer').removeClass('show-openTextInput-modelanswer');
+      this.$answer.html(answerText);
     },
 
     /**
@@ -279,20 +267,20 @@ define([
      * Used by adapt-contrib-spoor to get the type of this question in the format required by the cmi.interactions.n.type data field
      */
     getResponseType: function() {
-      return "fill-in";
+      return 'fill-in';
     }
   });
 
   Adapt.register('openTextInput', OpenTextInput);
-  
+
   Adapt.once('adapt:start', restoreQuestionStatusPolyfill);
 
-    /**
-     * Spoor cannot store text input values and so the completion status of this component does not get
-     * saved or restored properly. This function ensures that the question's completion status is
-     * restored in a way that other extensions e.g. learning objectives can obtain accurate data for processing
-     *
-     */
+  /**
+   * Spoor cannot store text input values and so the completion status of this component does not get
+   * saved or restored properly. This function ensures that the question's completion status is
+   * restored in a way that other extensions e.g. learning objectives can obtain accurate data for processing
+   *
+   */
   function restoreQuestionStatusPolyfill() {
     Adapt.components.each(function(component) {
       if (component.get('_component') !== 'openTextInput') {
@@ -300,17 +288,19 @@ define([
       }
 
       // If the component is complete then it must be correct
-        // _isInteractionComplete needs to be set to true so marking is restored correctly
+      // _isInteractionComplete needs to be set to true so marking is restored correctly
       if (component.get('_isComplete')) {
-          component.set({
-              _isCorrect: true,
-              _isInteractionComplete: true
-          });
+        component.set({
+          _isCorrect: true,
+          _isInteractionComplete: true
+        });
 
         // Add a manual trigger just in case any extensions listening for this change have already loaded
         component.trigger('change:_isComplete', component, true);
       }
     });
   }
+
+  return OpenTextInput;
 
 });
