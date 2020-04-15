@@ -260,6 +260,7 @@ define([
         return;
       }
       this.$answer.html(answerText);
+      this.$answer.a11y_focus();
     },
 
     scrollToTextArea: function() {
