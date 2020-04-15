@@ -63,11 +63,11 @@
             max-height: none;
             overflow: auto;
 
-            &:focus {
+            .accessibility.no-touch &:focus {
                 outline: @focus-outline;
             }
 
-            p {
+            p, ul, ol {
                 margin: 16px;
             }
         }
