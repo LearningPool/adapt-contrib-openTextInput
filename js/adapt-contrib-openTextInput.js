@@ -30,8 +30,9 @@ define([
     setupQuestion: function() {
       this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
 
-      // Open Text Input cannot show feedback.
+      // Open Text Input cannot show feedback, but may have been set in older courses
       this.model.set('_canShowFeedback', false);
+      this.model.set('_feedback', {});
 
       this.formatPlaceholder();
 
@@ -134,7 +135,7 @@ define([
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
       var userAnswer = '';
 
-      if (this.supportsHtml5Storage()) {
+      if (this.supportsHtml5Storage() && !this.model.get('_isResetOnRevisit')) {
         userAnswer = localStorage.getItem(identifier);
         if (userAnswer) {
           return userAnswer;
@@ -194,7 +195,7 @@ define([
       // Use unique identifier to avoid collisions with other components
       var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
 
-      if (this.supportsHtml5Storage()) {
+      if (this.supportsHtml5Storage() && !this.model.get('_isResetOnRevisit')) {
         // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
         // report as being able to support localStorage but fail when setItem() is called.
         try {
@@ -224,17 +225,24 @@ define([
     },
 
     postRender: function() {
-      // Set the height of the textarea to the height of the model answer.
-      // This creates a smoother user experience
-      this.$('.openTextInput-item-textbox').height(this.$('.openTextInput-item-modelanswer').height());
+      if (this.$('.openTextInput-item-modelanswer').height() <= 0) {
+        this.$('.openTextInput-item-textbox, .openTextInput-count-characters').css('height', 'auto');
+      } else {
+        // Set the height of the textarea to the height of the model answer.
+        // This creates a smoother user experience
+        this.$('.openTextInput-item-textbox').height(this.$('.openTextInput-item-modelanswer').height());
+        this.$('.openTextInput-count-characters').height(this.$('.openTextInput-count-characters').height());
+      }
+
       this.$('.openTextInput-item-modelanswer').addClass('hide-openTextInput-modelanswer');
-      this.$('.openTextInput-count-characters').height(this.$('.openTextInput-count-characters').height());
 
       QuestionView.prototype.postRender.call(this);
     },
 
     showCorrectAnswer: function() {
       this.toggleAnswer(BUTTON_STATE.HIDE_CORRECT_ANSWER, 'showUserAnswer', 'modelAnswer');
+
+      this.scrollToTextArea();
     },
 
     hideCorrectAnswer: function() {
@@ -254,6 +262,14 @@ define([
       this.$answer.html(answerText);
     },
 
+    scrollToTextArea: function() {
+      // Smooth scroll to top of TextArea
+      Adapt.scrollTo(this.$('.openTextInput-widget'), {
+        duration: 400,
+        offset: -parseInt($('#wrapper').css('padding-top'))
+      });
+    },
+
     /**
      * Used by adapt-contrib-spoor to get the user's answers in the format required by the cmi.interactions.n.student_response data field
      */
@@ -268,6 +284,34 @@ define([
      */
     getResponseType: function() {
       return 'fill-in';
+    },
+
+    getInteractionObject: function() {
+      return {
+        correctResponsesPattern: [
+          this.model.get('modelAnswer')
+        ]
+      };
+    },
+
+    /**
+     * Used by questionView. Clears the models on Revisit userAnswer so input appears blank
+     */
+    resetQuestionOnRevisit: function() {
+      this.resetQuestion();
+    },
+
+    /**
+     * Used by questionView. Clears the models userAnswer onResetClicked so input appears blank
+     */
+    resetQuestion: function() {
+      this.model.set('_userAnswer', '');
+
+      if (this.$textbox === undefined) {
+        this.$textbox = this.$('textarea.openTextInput-item-textbox');
+      }
+
+      this.$textbox.val(this.model.get('_userAnswer'));
     }
   });
 

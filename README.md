@@ -62,6 +62,10 @@ This value is the text before the limited or counted characters.
 
 Defines the height of the textarea with numbers starting by 1.
 
+###_isResetOnRevisit
+
+Flag to set whether the text field should be cleared with reset/retry assessment. Default false
+
 ####modelAnswer
 
 This value is the best practise answer. The user can compare this answer to his one.
@@ -90,7 +94,7 @@ This value is displayed at the submit button.
 
 This value is displayed on the showModelAnswer Button.
 
-#####showUserAnser
+#####showUserAnswer
 
 This value is displayed on the showUserAnswer Button.
 
