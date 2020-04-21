@@ -87,7 +87,7 @@ define([
       }
 
       // Keep the action button enabled so we can show the model answer.
-      this.$('.buttons-action').a11y_cntrl_enabled(true);
+      this.$('.buttons-action').a11y_cntrl_enabled(true).a11y_focus();
     },
 
     canSubmit: function() {
