@@ -87,7 +87,10 @@ define([
       }
 
       // Keep the action button enabled so we can show the model answer.
-      this.$('.buttons-action').a11y_cntrl_enabled(true).a11y_focus();
+      // Add a delay to guarantee button receives focus
+      setTimeout(function() {
+        this.$('.buttons-action').a11y_cntrl_enabled(true).a11y_focus();
+      }.bind(this), 500);
     },
 
     canSubmit: function() {
@@ -240,9 +243,9 @@ define([
     },
 
     showCorrectAnswer: function() {
+      this.scrollToTextArea();
       this.toggleAnswer(BUTTON_STATE.HIDE_CORRECT_ANSWER, 'showUserAnswer', 'modelAnswer');
 
-      this.scrollToTextArea();
     },
 
     hideCorrectAnswer: function() {
@@ -259,6 +262,7 @@ define([
       if (!this.$answer) {
         return;
       }
+      console.log(this);
       this.$answer.html(answerText);
       this.$answer.a11y_focus();
     },
