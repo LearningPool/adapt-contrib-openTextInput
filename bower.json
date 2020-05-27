@@ -1,7 +1,7 @@
 {
   "name": "adapt-contrib-openTextInput",
-  "version": "1.2.12",
-  "framework": ">=2.0.17",
+  "version": "2.0.0",
+  "framework": ">=5.3.0",
   "homepage": "https://github.com/learningpool/adapt-contrib-openTextInput",
   "authors": [
     "Thomas Eitler <thomas.eitler@learnchamp.com>",
