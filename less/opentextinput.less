@@ -1,15 +1,15 @@
 /* Opera/IE 8+ */
 
-.openTextInput-component {
-    .openTextInput-count-characters {
+.opentextinput {
+    &__count-characters {
         background: @primary-color;
         color: @white;
         padding: 14px;
         position: relative;
-        .openTextInput-count-amount {
+        .opentextinput__count-amount {
             font-weight: bold;
         }
-        .openTextInput-autosave {
+        .opentextinput__autosave {
             bottom: -4px;
             color: @white;
             display: inline-block;
@@ -20,7 +20,7 @@
             right: 0;
         }
     }
-    .openTextInput-answer-container {
+    &__answer-container {
         border: none;
 
         input:disabled,
@@ -29,7 +29,7 @@
             opacity: 1;
         }
     }
-    .openTextInput-item-textbox {
+    &__item-textbox {
         border: none;
         color: @primary-color;
         display: block;
@@ -48,7 +48,7 @@
         @media all and (max-width: (@device-width-medium - 1px)) {
             width: 100%;
         }
-        .openTextInput-action-button {
+        .opentextinput__action-button {
             background-color: @button-color;
             border: @button-border;
             color: @button-text-color;
@@ -65,7 +65,7 @@
                 color: @button-text-hover-color;
             }
         }
-        .openTextInput-save-button {
+        .opentextinput__save-button {
             margin-right: 1%;
             width: 24%;
             @media all and (max-width: (@device-width-medium - 1px)) {
@@ -73,7 +73,7 @@
                 width: 49.5%;
             }
         }
-        .openTextInput-clear-button {
+        .opentextinput__clear-button {
             margin-right: 1%;
             width: 24%;
             @media all and (max-width: (@device-width-medium - 1px)) {
@@ -81,7 +81,7 @@
                 width: 49.5%;
             }
         }
-        .openTextInput-action-button {
+        .opentextinput__action-button {
             width: 50%;
             @media all and (max-width: (@device-width-medium - 1px)) {
                 width: 100%;
@@ -89,23 +89,23 @@
         }
 
     }
-    .hide-openTextInput-modelanswer {
+    &__hide-modelanswer {
         display: none;
         position: absolute;
     }
-    .show-openTextInput-modelanswer {
+    &__show-modelanswer {
         display: block;
         position: relative;
     }
-    .openTextInput-inner {
-        .openTextInput-widget {
-            .openTextInput-item-textbox {
-                &.openTextInput-item-modelanswer {
+    &__inner {
+        .opentextinput__widget {
+            .opentextinput__item-textbox {
+                &.opentextinput__item-modelanswer {
                     background-color: #fff;
                     max-height: none;
-                        p, ul, ol {
-                            margin: 16px;
-                        }
+                    p, ul, ol {
+                        margin: 16px;
+                    }
                 }    
             }
         }

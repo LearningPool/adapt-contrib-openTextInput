@@ -15,7 +15,7 @@ define([
   var OpenTextInput = QuestionView.extend({
 
     events: {
-      'keyup .openTextInput-item-textbox': 'onKeyUpTextarea'
+      'keyup .opentextinput__item-textbox': 'onKeyUpTextarea'
     },
 
     formatPlaceholder: function() {
@@ -113,13 +113,13 @@ define([
       this.listenTo(this.buttonsView, 'buttons:stateUpdate', this.onActionClicked);
 
       if (this.$textbox === undefined) {
-        this.$textbox = this.$('textarea.openTextInput-item-textbox');
+        this.$textbox = this.$('textarea.opentextinput__item-textbox');
       }
 
-      this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
-      this.$countChars = this.$('.openTextInput-count-characters-container');
+      this.$modelAnswer = this.$('.opentextinput__item-modelanswer');
+      this.$countChars = this.$('.opentextinput__count-characters-container');
 
-      this.$autosave = this.$('.openTextInput-autosave');
+      this.$autosave = this.$('.opentextinput__autosave');
       this.$autosave.text(this.model.get('savedMessage'));
 
       this.$autosave.css({opacity: 0});
@@ -164,9 +164,9 @@ define([
       var allowedCharacters = this.model.get('_allowedCharacters');
       if (allowedCharacters != null) {
         var charactersLeft = allowedCharacters - charLengthOfTextarea;
-        this.$('.openTextInput-count-amount').html(charactersLeft);
+        this.$('.opentextinput__count-amount').html(charactersLeft);
       } else {
-        this.$('.openTextInput-count-amount').html(charLengthOfTextarea);
+        this.$('.opentextinput__count-amount').html(charLengthOfTextarea);
       }
     },
 
@@ -226,20 +226,20 @@ define([
       // Keep the action button enabled so we can show the model answer
       this.$('.buttons-action').a11y_cntrl_enabled(true);
 
-      this.$('.openTextInput-action-button').html(buttonText);
+      this.$('.opentextinput__action-button').html(buttonText);
     },
 
     postRender: function() {
-      if (this.$('.openTextInput-item-modelanswer').height() <= 0) {
-        this.$('.openTextInput-item-textbox, .openTextInput-count-characters').css('height', 'auto');
+      if (this.$('.opentextinput__item-modelanswer').height() <= 0) {
+        this.$('.opentextinput__item-textbox, .opentextinput__count-characters').css('height', 'auto');
       } else {
         // Set the height of the textarea to the height of the model answer.
         // This creates a smoother user experience
-        this.$('.openTextInput-item-textbox').height(this.$('.openTextInput-item-modelanswer').height());
-        this.$('.openTextInput-count-characters').height(this.$('.openTextInput-count-characters').height());
+        this.$('.opentextinput__item-textbox').height(this.$('.opentextinput__item-modelanswer').height());
+        this.$('.opentextinput__count-characters').height(this.$('.opentextinput__count-characters').height());
       }
 
-      this.$('.openTextInput-item-modelanswer').addClass('hide-openTextInput-modelanswer');
+      this.$('.opentextinput__item-modelanswer').addClass('opentextinput__hide-modelanswer');
 
       QuestionView.prototype.postRender.call(this);
     },
@@ -250,7 +250,7 @@ define([
 
       this.$textbox.hide();
       this.$countChars.hide();
-      this.$modelAnswer.addClass('show-openTextInput-modelanswer').removeClass('hide-openTextInput-modelanswer');
+      this.$modelAnswer.addClass('opentextinput__show-modelanswer').removeClass('opentextinput__hide-modelanswer');
 
       this.scrollToTextArea();
     },
@@ -260,26 +260,26 @@ define([
       this.updateActionButton(this.model.get('_buttons').showModelAnswer);
 
       if (this.$textbox === undefined) {
-        this.$textbox = this.$('textarea.openTextInput-item-textbox');
+        this.$textbox = this.$('textarea.opentextinput__item-textbox');
       }
 
       if (this.$modelAnswer === undefined) {
-        this.$modelAnswer = this.$('.openTextInput-item-modelanswer');
+        this.$modelAnswer = this.$('.opentextinput__item-modelanswer');
       }
 
       this.$textbox.val(this.model.get('_userAnswer')).show();
 
       if (this.$countChars === undefined) {
-        this.$countChars = this.$('.openTextInput-count-characters-container');
+        this.$countChars = this.$('.opentextinput__count-characters-container');
       }
 
       this.$countChars.show();
-      this.$modelAnswer.addClass('hide-openTextInput-modelanswer').removeClass('show-openTextInput-modelanswer');
+      this.$modelAnswer.addClass('opentextinput__hide-modelanswer').removeClass('opentextinput__show-modelanswer');
     },
 
     scrollToTextArea: function() {
       // Smooth scroll to top of TextArea
-      Adapt.scrollTo(this.$('.openTextInput-widget'), {
+      Adapt.scrollTo(this.$('.opentextinput__widget'), {
         duration: 400,
         offset: -parseInt($('#wrapper').css('padding-top'))
       });
@@ -323,7 +323,7 @@ define([
       this.model.set('_userAnswer', '');
 
       if (this.$textbox === undefined) {
-        this.$textbox = this.$('textarea.openTextInput-item-textbox');
+        this.$textbox = this.$('textarea.opentextinput__item-textbox');
       }
 
       this.$textbox.val(this.model.get('_userAnswer'));
