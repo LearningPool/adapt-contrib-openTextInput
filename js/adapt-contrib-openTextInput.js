@@ -173,7 +173,7 @@ define([
     }
 
     onKeyUpTextarea() {
-      _.throttle(function() {
+      var countandLimitCharacters = _.throttle(() => {
         this.limitCharacters();
         var text = this.$textbox.val();
         this.model.set('_userAnswer', text);
@@ -189,6 +189,8 @@ define([
           self.storeUserAnswer();
         }, 2000);
       }, 300);
+
+      countandLimitCharacters();
     }
 
     limitCharacters() {
