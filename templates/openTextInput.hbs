@@ -3,16 +3,17 @@
   {{> component this}}
   <div class="component__widget opentextinput__widget">
     <div class="opentextinput__count-characters">
-      <div class="opentextinput__count-characters-container"><span class="opentextinput__count-amount"></span>&nbsp;{{remainingCharactersText}}</div>
+      <div class="opentextinput__count-characters-container"><span
+          class="opentextinput__count-amount"></span>&nbsp;{{remainingCharactersText}}</div>
       <div class="opentextinput__autosave"></div>
     </div>
 
     <div class="opentextinput__answer-container">
-        <textarea class="opentextinput__item-textbox" placeholder="{{placeholder}}"
-                  maxlength="{{_allowedCharacters}}">{{_userAnswer}}</textarea>
+      <textarea class="opentextinput__item-textbox" placeholder="{{placeholder}}"
+        maxlength="{{_allowedCharacters}}">{{_userAnswer}}</textarea>
     </div>
     <div class="opentextinput__item-modelanswer opentextinput__item-textbox">{{{modelAnswer}}}</div>
-    <div class="buttons">
+    <div class="btn__container">
     </div>
   </div>
 </div>

@@ -1,113 +1,30 @@
-/* Opera/IE 8+ */
-
 .opentextinput {
-    &__count-characters {
-        background: @primary-color;
-        color: @white;
-        padding: 14px;
-        position: relative;
-        .opentextinput__count-amount {
-            font-weight: bold;
-        }
-        .opentextinput__autosave {
-            bottom: -4px;
-            color: @white;
-            display: inline-block;
-            font-size: 12px;
-            font-style: italic;
-            margin-right: 10px;
-            position: absolute;
-            right: 0;
-        }
-    }
-    &__answer-container {
-        border: none;
+  &__count-characters {
+    background: @item-color;
+    color: @item-color-inverted;
+    position: relative;
 
-        input:disabled,
-        textarea:disabled {
-            color: @disabled-color;
-            opacity: 1;
-        }
+    .opentextinput__count-amount {
+      font-weight: bold;
     }
-    &__item-textbox {
-        border: none;
-        color: @primary-color;
-        display: block;
-        margin: 0;
-        min-height: 20px;
-        padding: 1%;
-        resize: none;
-        width: 98%;
-    }
-    .buttons {
-        font-size: 0;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: @button-margin-top;
-        width: 100%;
-        @media all and (max-width: (@device-width-medium - 1px)) {
-            width: 100%;
-        }
-        .opentextinput__action-button {
-            background-color: @button-color;
-            border: @button-border;
-            color: @button-text-color;
-            display: inline-block;
-            font-family: @font-family;
-            font-size: @font-size;
-            font-weight: @font-weight-light;
-            margin-top: @button-margin-top;
-            padding: @button-padding;
-            text-align: center;
-            text-decoration: none;
-            &:hover {
-                background-color: @button-hover-color;
-                color: @button-text-hover-color;
-            }
-        }
-        .opentextinput__save-button {
-            margin-right: 1%;
-            width: 24%;
-            @media all and (max-width: (@device-width-medium - 1px)) {
-                margin-right: 1%;
-                width: 49.5%;
-            }
-        }
-        .opentextinput__clear-button {
-            margin-right: 1%;
-            width: 24%;
-            @media all and (max-width: (@device-width-medium - 1px)) {
-                margin-right: 0;
-                width: 49.5%;
-            }
-        }
-        .opentextinput__action-button {
-            width: 50%;
-            @media all and (max-width: (@device-width-medium - 1px)) {
-                width: 100%;
-            }
-        }
 
+    .opentextinput__autosave {
+      position: absolute;
+      right: 0;
     }
-    &__hide-modelanswer {
-        display: none;
-        position: absolute;
-    }
-    &__show-modelanswer {
-        display: block;
-        position: relative;
-    }
-    &__inner {
-        .opentextinput__widget {
-            .opentextinput__item-textbox {
-                &.opentextinput__item-modelanswer {
-                    background-color: #fff;
-                    max-height: none;
-                    p, ul, ol {
-                        margin: 16px;
-                    }
-                }    
-            }
-        }
-    }
+  }
+
+  &__item-textbox {
+    display: block;
+  }
+
+  &__hide-modelanswer {
+    display: none;
+    position: absolute;
+  }
+
+  &__show-modelanswer {
+    display: block;
+    position: relative;
+  }
 }
