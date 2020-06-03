@@ -77,7 +77,7 @@
     "_recordInteraction": {
       "type": "boolean",
       "required": false,
-      "default": false,
+      "default": true,
       "title": "Record interaction",
       "inputType": "Checkbox",
       "validators": [],
