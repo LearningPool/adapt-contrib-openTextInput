@@ -215,7 +215,7 @@ define([
     },
 
     onActionClicked: function(buttonState) {
-      if (buttonState === BUTTON_STATE.SUBMIT) {
+      if (buttonState === BUTTON_STATE.SUBMIT && this.canSubmit()) {
         this.onCompleteChanged(this.model, true, buttonState);
       }
     },
@@ -262,7 +262,6 @@ define([
       if (!this.$answer) {
         return;
       }
-      console.log(this);
       this.$answer.html(answerText);
       this.$answer.a11y_focus();
     },
