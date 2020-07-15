@@ -77,6 +77,8 @@ define([
       this.$textbox.prop('disabled', isComplete);
       this.$answer.html(model.get('_userAnswer').replace(/\n/g, '<br>'));
 
+      this.model.set('_isInteractionComplete', isComplete);
+
       if (!isComplete || !model.get('_canShowModelAnswer') || _.isEmpty(buttonState)) return;
 
       // Toggle the button.
@@ -124,7 +126,7 @@ define([
       this.$autosave = this.$('.openTextInput-autosave');
       this.$autosave.text(this.model.get('savedMessage'));
 
-      this.$autosave.css({opacity: 0});
+      this.$autosave.css({ opacity: 0 });
 
       this.countCharacters();
       this.setReadyStatus();
@@ -245,11 +247,15 @@ define([
     showCorrectAnswer: function() {
       this.scrollToTextArea();
       this.toggleAnswer(BUTTON_STATE.HIDE_CORRECT_ANSWER, 'showUserAnswer', 'modelAnswer');
-
     },
 
     hideCorrectAnswer: function() {
-      this.toggleAnswer(BUTTON_STATE.SHOW_CORRECT_ANSWER, 'showModelAnswer', '_userAnswer');
+      if (this.model.get('_canShowModelAnswer')) {
+        this.toggleAnswer(BUTTON_STATE.SHOW_CORRECT_ANSWER, 'showModelAnswer', '_userAnswer');
+        return;
+      }
+
+      this.model.set('_buttonState', BUTTON_STATE.CORRECT);
     },
 
     toggleAnswer: function(buttonState, buttonKey, answerKey) {
