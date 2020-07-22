@@ -8,24 +8,37 @@
     "title": "Title of the problem",
     "displayTitle": "Open TextInput Component",
     "body": "Description of the problem.",
+    "_supportedLayout": "",
+    "instruction": "",
+    "_isResetOnRevisit": true,
+    "_canShowModelAnswer": true,
+    "_canShowMarking": true,
     "placeholder": "Enter your answer here",
     "_allowedCharacters": 200,
     "remainingCharactersText": "Characters left",
-    "characterCountText": "Amount of Characters",
-    "_numberOfRows": 4,
-    "_isAllowedToNavigate": false,
-    "clearNotificationTitle": "Title: Clear Text",
-    "clearNotificationBody": "Clear Notification Body",
-    "unsavedChangesNotificationTitle": "Body: Do you really want to delete your written text?",
-    "unsavedChangesNotificationBody": "Unsaved changes notification body",
+    "_recordInteraction": true,
     "modelAnswer": "Answer to compare to.",
     "savedMessage": "Your text has been saved",
-    "submittedMessage": "Your answer has been submitted",
     "_buttons": {
-        "save": "Save",
-        "submit": "Submit",
-        "showModelAnswer": "Show correct answer",
-        "showUserAnswer": "Hide correct answer",
-        "clear": "Clear"
+        "_submit": {
+            "buttonText": "Submit",
+            "ariaLabel": "Select here to submit your answer."
+        },
+        "_showCorrectAnswer": {
+            "buttonText": "Correct Answer",
+            "ariaLabel": ""
+        },
+        "_hideCorrectAnswer": {
+            "buttonText": "My Answer",
+            "ariaLabel": ""
+        },
+        "_showFeedback": {
+            "buttonText": "Show feedback",
+            "ariaLabel": ""
+        },
+        "_reset": {
+            "buttonText": "Reset",
+            "ariaLabel": ""
+        }
     }
-},
+}
