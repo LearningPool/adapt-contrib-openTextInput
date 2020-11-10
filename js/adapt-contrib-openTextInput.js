@@ -23,8 +23,8 @@ define([
     formatPlaceholder() {
       // Replace quote marks in placholder.
       var placeholder = this.model.get('placeholder') || '';
-      
-      placeholder = placeholder.replace(/"/g, "'");
+
+      placeholder = placeholder.replace(/"/g, '\'');
 
       this.model.set('placeholder', placeholder);
     }
@@ -69,7 +69,7 @@ define([
       }
 
       if (buttons['_showCorrectAnswer'] == undefined) {
-        buttons._showCorrectAnswer = buttons._showModelAnswer || 'Show Model Answer'
+        buttons._showCorrectAnswer = buttons._showModelAnswer || 'Show Model Answer';
       }
 
       this.model.set('_buttons', buttons);
@@ -77,6 +77,7 @@ define([
 
     onCompleteChanged(model, isComplete, buttonState) {
       this.$textbox.prop('disabled', isComplete);
+      this.$answer.html(model.get('_userAnswer').replace(/\n/g, '<br>'));
 
       if (isComplete) {
         if (model.get('_canShowModelAnswer')) {
@@ -101,7 +102,7 @@ define([
       if (typeof String.prototype.trim !== 'function') {
         String.prototype.trim = function() {
           return this.replace(/^\s+|\s+$/g, '');
-        }
+        };
       }
 
       return answer && answer.trim() !== '';
@@ -124,7 +125,7 @@ define([
       this.$autosave = this.$('.opentextinput__autosave');
       this.$autosave.text(this.model.get('savedMessage'));
 
-      this.$autosave.css({opacity: 0});
+      this.$autosave.css({ opacity: 0 });
 
       this.countCharacters();
       this.setReadyStatus();
@@ -262,8 +263,11 @@ define([
       if (this.$modelAnswer === undefined) {
         this.$modelAnswer = this.$('.opentextinput__item-modelanswer');
       }
+    }
 
-      this.$textbox.val(this.model.get('_userAnswer')).show();
+    toggleAnswer(buttonState, buttonKey, answerKey) {
+      this.model.set('_buttonState', buttonState);
+      this.updateActionButton(buttonKey);
 
       if (this.$countChars === undefined) {
         this.$countChars = this.$('.opentextinput__count-characters-container');
@@ -325,15 +329,15 @@ define([
   };
 
   Adapt.register('openTextInput', OpenTextInput);
-  
+
   Adapt.once('adapt:start', restoreQuestionStatusPolyfill);
 
-    /**
-     * Spoor cannot store text input values and so the completion status of this component does not get
-     * saved or restored properly. This function ensures that the question's completion status is
-     * restored in a way that other extensions e.g. learning objectives can obtain accurate data for processing
-     *
-     */
+  /**
+   * Spoor cannot store text input values and so the completion status of this component does not get
+   * saved or restored properly. This function ensures that the question's completion status is
+   * restored in a way that other extensions e.g. learning objectives can obtain accurate data for processing
+   *
+   */
   function restoreQuestionStatusPolyfill() {
     Adapt.components.each(function(component) {
       if (component.get('_component') !== 'openTextInput') {
@@ -341,17 +345,19 @@ define([
       }
 
       // If the component is complete then it must be correct
-        // _isInteractionComplete needs to be set to true so marking is restored correctly
+      // _isInteractionComplete needs to be set to true so marking is restored correctly
       if (component.get('_isComplete')) {
-          component.set({
-              _isCorrect: true,
-              _isInteractionComplete: true
-          });
+        component.set({
+          _isCorrect: true,
+          _isInteractionComplete: true
+        });
 
         // Add a manual trigger just in case any extensions listening for this change have already loaded
         component.trigger('change:_isComplete', component, true);
       }
     });
   }
+
+  return OpenTextInput;
 
 });
