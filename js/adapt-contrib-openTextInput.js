@@ -8,12 +8,16 @@
 
 define([
   'core/js/adapt',
-  './OpenTextInputView'
-], function(Adapt, OpenTextInputView) {
-
-  Adapt.register('openTextInput', OpenTextInputView);
+  './OpenTextInputModel',
+  './OpenTextInputView',
+], function(Adapt, OpenTextInputModel, OpenTextInputView) {
 
   Adapt.once('adapt:start', restoreQuestionStatusPolyfill);
+
+  return Adapt.register('openTextInput', {
+    view: OpenTextInputView,
+    model: OpenTextInputModel
+  });
 
   /**
    * Spoor cannot store text input values and so the completion status of this component does not get

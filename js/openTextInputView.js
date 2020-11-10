@@ -15,14 +15,15 @@ define([
   class OpenTextInputView extends QuestionView {
 
     events() {
-        return {
+      return {
         'keyup .opentextinput__item-textbox': 'onKeyUpTextarea'
       }
     }
 
     setupQuestion() {
       this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
-      this.model.setupQuestion();
+      const localUserAnswer = this.getUserAnswer();
+      this.model.setupQuestion(localUserAnswer);
     }
 
     onCompleteChanged(model, isComplete, buttonState) {
@@ -78,17 +79,14 @@ define([
     }
 
     getUserAnswer() {
-      var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
-      var userAnswer = '';
+      const identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
+      let userAnswer = false;
 
       if (this.supportsHtml5Storage() && !this.model.get('_isResetOnRevisit')) {
         userAnswer = localStorage.getItem(identifier);
-        if (userAnswer) {
-          return userAnswer;
-        }
       }
 
-      return false;
+      return userAnswer;
     }
 
     supportsHtml5Storage() {
@@ -101,20 +99,22 @@ define([
     }
 
     countCharacters() {
-      var charLengthOfTextarea = this.$textbox.val().length;
-      var allowedCharacters = this.model.get('_allowedCharacters');
+      const charLengthOfTextarea = this.$textbox.val().length;
+      const allowedCharacters = this.model.get('_allowedCharacters');
+      let charactersLeft = charLengthOfTextarea;
+
       if (allowedCharacters != null) {
-        var charactersLeft = allowedCharacters - charLengthOfTextarea;
-        this.$('.opentextinput__count-amount').html(charactersLeft);
-      } else {
-        this.$('.opentextinput__count-amount').html(charLengthOfTextarea);
+        charactersLeft = allowedCharacters - charLengthOfTextarea;
       }
+
+      this.$('.opentextinput__count-amount').html(charactersLeft);
     }
 
     onKeyUpTextarea() {
-      var countandLimitCharacters = _.throttle(() => {
+      const countandLimitCharacters = _.throttle(() => {
         this.limitCharacters();
-        var text = this.$textbox.val();
+
+        const text = this.$textbox.val();
         this.model.set('_userAnswer', text);
 
         this.countCharacters();
@@ -123,7 +123,7 @@ define([
           clearTimeout(this.saveTimeout);
         }
 
-        var self = this;
+        const self = this;
         this.saveTimeout = setTimeout(function() {
           self.storeUserAnswer();
         }, 2000);
@@ -133,16 +133,16 @@ define([
     }
 
     limitCharacters() {
-      var allowedCharacters = this.model.get('_allowedCharacters');
+      const allowedCharacters = this.model.get('_allowedCharacters');
       if (allowedCharacters != null && this.$textbox.val().length > allowedCharacters) {
-        var substringValue = this.$textbox.val().substring(0, allowedCharacters);
+        const substringValue = this.$textbox.val().substring(0, allowedCharacters);
         this.$textbox.val(substringValue);
       }
     }
 
     storeUserAnswer() {
       // Use unique identifier to avoid collisions with other components
-      var identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
+      const identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
 
       if (this.supportsHtml5Storage() && !this.model.get('_isResetOnRevisit')) {
         // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
