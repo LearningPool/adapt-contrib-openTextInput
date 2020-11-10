@@ -1,23 +1,23 @@
 {
-  "name": "adapt-contrib-openTextInput",
-  "version": "1.2.15",
-  "framework": ">=2.0.17",
-  "homepage": "https://github.com/learningpool/adapt-contrib-openTextInput",
-  "authors": [
-    "Thomas Eitler <thomas.eitler@learnchamp.com>",
-    "Barbara Fellner <me@barbarafellner.at>",
-    "Petra Nussdorfer <petra.nussdorfer@learnchamp.com>",
-    "Brian Quinn <brian@learningpool.com>",
-    "Barry McKay <barry@learningpool.com>",
-    "Cahir O'Doherty <cahir.odoherty@learningpool.com>"
-  ],
-  "description": "A question component that allows the learner to input open text based upon a question stem.",
-  "main": "/js/adapt-contrib-openTextInput.js",
-  "keywords": [
-    "adapt-plugin",
-    "adapt-component"
-  ],
-  "component": "openTextInput",
-  "displayName": "Open Text Input",
-  "license": "GPLv3"
+    "name": "adapt-contrib-openTextInput",
+    "version": "2.0.0",
+    "framework": ">=5.7.0",
+    "homepage": "https://github.com/learningpool/adapt-contrib-openTextInput",
+    "authors": [
+        "Thomas Eitler <thomas.eitler@learnchamp.com>",
+        "Barbara Fellner <me@barbarafellner.at>",
+        "Petra Nussdorfer <petra.nussdorfer@learnchamp.com>",
+        "Brian Quinn <brian@learningpool.com>",
+        "Barry McKay <barry@learningpool.com>",
+        "Cahir O'Doherty <cahir.odoherty@learningpool.com>"
+    ],
+    "description": "A question component that allows the learner to input open text based upon a question stem.",
+    "main": "/js/adapt-contrib-openTextInput.js",
+    "keywords": [
+        "adapt-plugin",
+        "adapt-component"
+    ],
+    "component": "openTextInput",
+    "displayName": "Open Text Input",
+    "license": "GPLv3"
 }

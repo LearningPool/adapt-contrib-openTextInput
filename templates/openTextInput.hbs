@@ -1,18 +1,19 @@
 {{! Maintainers - Learning Pool}}
-<div class="component-inner openTextInput-inner">
+<div class="component__inner opentextinput__inner">
   {{> component this}}
-  <div class="component-widget openTextInput-widget">
-    <div class="openTextInput-count-characters a11y-ignore">
-      <div class="openTextInput-count-characters-container"><span class="openTextInput-count-amount"></span>&nbsp;{{remainingCharactersText}}</div>
-      <div class="openTextInput-autosave"></div>
+  <div class="component__widget opentextinput__widget">
+    <div class="opentextinput__count-characters">
+      <div class="opentextinput__count-characters-container"><span
+          class="opentextinput__count-amount"></span>&nbsp;{{remainingCharactersText}}</div>
+      <div class="opentextinput__autosave"></div>
     </div>
 
-    <div class="openTextInput-answer-container">
-        <textarea class="openTextInput-item-textbox" placeholder="{{placeholder}}"
-                  maxlength="{{_allowedCharacters}}">{{_userAnswer}}</textarea>
+    <div class="opentextinput__answer-container">
+      <textarea class="opentextinput__item-textbox" placeholder="{{placeholder}}"
+        maxlength="{{_allowedCharacters}}">{{_userAnswer}}</textarea>
     </div>
-    <div class="openTextInput-item-answertext openTextInput-item-textbox" tabindex="0">{{{a11y_text modelAnswer}}}</div>
-    <div class="buttons">
+    <div class="opentextinput__item-modelanswer opentextinput__item-textbox">{{{modelAnswer}}}</div>
+    <div class="btn__container">
     </div>
   </div>
 </div>

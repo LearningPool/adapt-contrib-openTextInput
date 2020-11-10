@@ -1,126 +1,33 @@
-/* Opera/IE 8+ */
+.opentextinput {
+  &__count-characters {
+    background: @item-color;
+    color: @item-color-inverted;
+    position: relative;
 
-.openTextInput-component {
-    .openTextInput-widget {
-        &.submitted {
-            textarea {
-                display: none;
-            }
-
-            .openTextInput-item-answertext {
-                display: block;
-            }
-
-            .show-correct-answer {
-                .openTextInput-count-characters-container {
-                    display: none;
-                }
-            }
-        }
+    .opentextinput__count-amount {
+      font-weight: bold;
     }
 
-    .openTextInput-count-characters {
-        background: @primary-color;
-        color: @white;
-        padding: 14px;
-        position: relative;
-        .openTextInput-count-amount {
-            font-weight: bold;
-        }
-        .openTextInput-autosave {
-            bottom: -4px;
-            color: @white;
-            display: inline-block;
-            font-size: 12px;
-            font-style: italic;
-            margin-right: 10px;
-            position: absolute;
-            right: 0;
-        }
+    .opentextinput__autosave {
+      position: absolute;
+      right: 0;
     }
-    .openTextInput-answer-container {
-        border: none;
+  }
 
-        input:disabled,
-        textarea:disabled {
-            color: @disabled-color;
-            opacity: 1;
-        }
-    }
-    .openTextInput-item-textbox {
-        border: none;
-        color: @primary-color;
-        display: block;
-        margin: 0;
-        min-height: 20px;
-        padding: 1%;
-        resize: none;
-        width: 98%;
+  &__item-textbox {
+    display: block;
+    resize: none;
+    min-height: 8.75rem;
+    width: 100%;
+  }
 
-        &.openTextInput-item-answertext {
-            background-color: #fff;
-            display: none;
-            max-height: none;
-            overflow: auto;
+  &__hide-modelanswer {
+    display: none;
+    position: absolute;
+  }
 
-            .accessibility.no-touch &:focus {
-                outline: @focus-outline;
-            }
-
-            p, ul, ol {
-                margin: 16px;
-            }
-        }
-    }
-
-    .buttons {
-        font-size: 0;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: @button-margin-top;
-        width: 100%;
-        @media all and (max-width: (@device-width-medium - 1px)) {
-            width: 100%;
-        }
-        .openTextInput-action-button {
-            background-color: @button-color;
-            border: @button-border;
-            color: @button-text-color;
-            display: inline-block;
-            font-family: @font-family;
-            font-size: @font-size;
-            font-weight: @font-weight-light;
-            margin-top: @button-margin-top;
-            padding: @button-padding;
-            text-align: center;
-            text-decoration: none;
-            &:hover {
-                background-color: @button-hover-color;
-                color: @button-text-hover-color;
-            }
-        }
-        .openTextInput-save-button {
-            margin-right: 1%;
-            width: 24%;
-            @media all and (max-width: (@device-width-medium - 1px)) {
-                margin-right: 1%;
-                width: 49.5%;
-            }
-        }
-        .openTextInput-clear-button {
-            margin-right: 1%;
-            width: 24%;
-            @media all and (max-width: (@device-width-medium - 1px)) {
-                margin-right: 0;
-                width: 49.5%;
-            }
-        }
-        .openTextInput-action-button {
-            width: 50%;
-            @media all and (max-width: (@device-width-medium - 1px)) {
-                width: 100%;
-            }
-        }
-
-    }
+  &__show-modelanswer {
+    display: block;
+    position: relative;
+  }
 }
