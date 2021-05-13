@@ -183,7 +183,7 @@ define([
 
     showCorrectAnswer() {
       this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
-      
+
       this.$textbox.hide();
       this.$countChars.hide();
       this.$modelAnswer.addClass('opentextinput__show-modelanswer').removeClass('opentextinput__hide-modelanswer');
@@ -193,7 +193,7 @@ define([
 
     hideCorrectAnswer() {
       this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
-      
+
       if (this.$textbox === undefined) {
         this.$textbox = this.$('textarea.opentextinput__item-textbox');
       }
@@ -252,7 +252,7 @@ define([
      * Used by questionView. Clears the models userAnswer onResetClicked so input appears blank
      */
     resetQuestion() {
-      this.model.set('_userAnswer', '');
+      this.model.set('_userAnswer', null);
 
       if (this.$textbox === undefined) {
         this.$textbox = this.$('textarea.opentextinput__item-textbox');

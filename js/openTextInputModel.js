@@ -65,8 +65,8 @@ define([
     }
 
     canSubmit() {
-      const answer = this.get('_userAnswer') || '';
-      return answer.trim() !== '';
+      const answer = this.get('_userAnswer') || null;
+      return answer && answer.trim() !== '';
     }
 
     isCorrect() {
@@ -77,7 +77,7 @@ define([
      * Used by adapt-contrib-spoor to get the user's answers in the format required by the cmi.interactions.n.student_response data field
      */
     getResponse() {
-      return this.get('_userAnswer') || '';
+      return this.get('_userAnswer') || null;
     }
 
     /**
