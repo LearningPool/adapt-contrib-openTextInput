@@ -8,8 +8,8 @@
 
 define([
   'core/js/adapt',
-  './OpenTextInputModel',
-  './OpenTextInputView',
+  './openTextInputModel',
+  './openTextInputView',
 ], function(Adapt, OpenTextInputModel, OpenTextInputView) {
 
   Adapt.once('adapt:start', restoreQuestionStatusPolyfill);
