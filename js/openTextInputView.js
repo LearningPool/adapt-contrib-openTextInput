@@ -28,7 +28,7 @@ define([
 
     onCompleteChanged(model, isComplete, buttonState) {
       this.$textbox.prop('disabled', isComplete);
-      this.$answer.html(model.get('userAnswer').replace(/\n/g, '<br>'));
+      this.$answer.html(model.getUserAnswer().replace(/\n/g, '<br>'));
 
       if (isComplete) {
         if (model.get('_canShowModelAnswer')) {
@@ -114,8 +114,8 @@ define([
       const countandLimitCharacters = _.throttle(() => {
         this.limitCharacters();
 
-        const text = this.$textbox.val();
-        this.model.set('userAnswer', text);
+        const userAnswer = this.$textbox.val();
+        this.model.setUserAnswer(userAnswer);
 
         this.countCharacters();
 
@@ -148,7 +148,7 @@ define([
         // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
         // report as being able to support localStorage but fail when setItem() is called.
         try {
-          localStorage.setItem(identifier, this.model.get('userAnswer'));
+          localStorage.setItem(identifier, this.model.getUserAnswer());
         } catch (e) {
           console.log('ERROR: HTML5 localStorage.setItem() failed! Unable to save user answer.');
         }
@@ -252,13 +252,13 @@ define([
      * Used by questionView. Clears the models userAnswer onResetClicked so input appears blank
      */
     resetQuestion() {
-      this.model.set('userAnswer', null);
+      this.setUserAnswer('');
 
       if (this.$textbox === undefined) {
         this.$textbox = this.$('textarea.opentextinput__item-textbox');
       }
 
-      this.$textbox.val(this.model.get('userAnswer'));
+      this.$textbox.val(this.model.getUserAnswer());
     }
   };
 
