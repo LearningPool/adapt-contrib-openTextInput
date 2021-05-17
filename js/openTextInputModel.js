@@ -28,10 +28,10 @@ define([
 
       this.formatPlaceholder();
 
-      if (!this.get('_userAnswer')) {
+      if (!this.get('userAnswer')) {
         const userAnswer = localUserAnswer;
         if (userAnswer) {
-          this.set('_userAnswer', userAnswer);
+          this.set('userAnswer', userAnswer);
         }
       }
 
@@ -65,7 +65,7 @@ define([
     }
 
     canSubmit() {
-      const answer = this.get('_userAnswer') || null;
+      const answer = this.get('userAnswer') || null;
       return answer && answer.trim() !== '';
     }
 
@@ -77,7 +77,7 @@ define([
      * Used by adapt-contrib-spoor to get the user's answers in the format required by the cmi.interactions.n.student_response data field
      */
     getResponse() {
-      return this.get('_userAnswer') || null;
+      return this.get('userAnswer') || null;
     }
 
     /**
