@@ -12,6 +12,9 @@ define([
   'core/js/enums/buttonStateEnum'
 ], function(Adapt, QuestionView, BUTTON_STATE) {
 
+  const HIDE_MODEL_ANSWER_CLASS = 'opentextinput__hide-modelanswer'
+  const SHOW_MODEL_ANSWER_CLASS = 'opentextinput__show-modelanswer'
+
   class OpenTextInputView extends QuestionView {
 
     events() {
@@ -22,7 +25,7 @@ define([
 
     setupQuestion() {
       this.listenTo(this.model, 'change:_isComplete', this.onCompleteChanged);
-      const localUserAnswer = this.getUserAnswer();
+      const localUserAnswer = this.loadLocalAnswer();
       this.model.setupQuestion(localUserAnswer);
     }
 
@@ -30,21 +33,23 @@ define([
       this.$textbox.prop('disabled', isComplete);
       this.$answer.html(model.getUserAnswer().replace(/\n/g, '<br>'));
 
-      if (isComplete) {
-        if (model.get('_canShowModelAnswer')) {
-          // Keep the action button enabled so we can show the model answer.
-          this.$('.btn__action').a11y_cntrl_enabled(true);
+      if (!isComplete) return;
 
-          if (!_.isEmpty(buttonState)) {
-            // Toggle the button.
-            if (buttonState == BUTTON_STATE.CORRECT || buttonState == BUTTON_STATE.HIDE_CORRECT_ANSWER || buttonState == BUTTON_STATE.SUBMIT) {
-              this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
-            } else {
-              this.model.set('_buttonState', BUTTON_STATE.HIDE_CORRECT_ANSWER);
-            }
-          }
-        }
+      if (!model.get('_canShowModelAnswer')) return;
+
+      // Keep the action button enabled so we can show the model answer.
+      this.$('.btn__action').a11y_cntrl_enabled(true);
+
+      if (_.isEmpty(buttonState)) return;
+
+      let _buttonState = BUTTON_STATE.HIDE_CORRECT_ANSWER
+
+      // Toggle the button.
+      if (buttonState == BUTTON_STATE.CORRECT || buttonState == BUTTON_STATE.HIDE_CORRECT_ANSWER || buttonState == BUTTON_STATE.SUBMIT) {
+        _buttonState = BUTTON_STATE.SHOW_CORRECT_ANSWER;
       }
+
+      this.model.set('_buttonState', _buttonState);
     }
 
     isCorrect() {
@@ -54,10 +59,7 @@ define([
     onQuestionRendered() {
       this.listenTo(this.buttonsView, 'buttons:stateUpdate', this.onActionClicked);
 
-      if (this.$textbox === undefined) {
-        this.$textbox = this.$('textarea.opentextinput__item-textbox');
-      }
-
+      this.$textbox = this.$('textarea.opentextinput__item-textbox');
       this.$modelAnswer = this.$('.opentextinput__item-modelanswer');
       this.$countChars = this.$('.opentextinput__count-characters-container');
 
@@ -78,7 +80,7 @@ define([
       }
     }
 
-    getUserAnswer() {
+    loadLocalAnswer() {
       const identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
       let userAnswer = false;
 
@@ -113,20 +115,7 @@ define([
     onKeyUpTextarea() {
       const countandLimitCharacters = _.throttle(() => {
         this.limitCharacters();
-
-        const userAnswer = this.$textbox.val();
-        this.model.setUserAnswer(userAnswer);
-
         this.countCharacters();
-
-        if (this.saveTimeout) {
-          clearTimeout(this.saveTimeout);
-        }
-
-        const self = this;
-        this.saveTimeout = setTimeout(function() {
-          self.storeUserAnswer();
-        }, 2000);
       }, 300);
 
       countandLimitCharacters();
@@ -140,6 +129,12 @@ define([
       }
     }
 
+    onSubmitted() {
+      const userAnswer = this.$textbox.val();
+      this.model.setUserAnswer(userAnswer);
+      this.storeUserAnswer();
+    }
+
     storeUserAnswer() {
       // Use unique identifier to avoid collisions with other components
       const identifier = this.model.get('_id') + '-OpenTextInput-UserAnswer';
@@ -148,7 +143,7 @@ define([
         // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
         // report as being able to support localStorage but fail when setItem() is called.
         try {
-          localStorage.setItem(identifier, this.model.getUserAnswer());
+          localStorage.setItem(identifier, this.$textbox.val());
         } catch (e) {
           console.log('ERROR: HTML5 localStorage.setItem() failed! Unable to save user answer.');
         }
@@ -167,16 +162,16 @@ define([
     }
 
     postRender() {
-      if (this.$('.opentextinput__item-modelanswer').height() <= 0) {
-        this.$('.opentextinput__item-textbox, .opentextinput__count-characters').css('height', 'auto');
+      if (this.$modelAnswer.height() <= 0) {
+        this.$textbox.css('height', 'auto');
+        this.$countChars.css('height', 'auto');
       } else {
         // Set the height of the textarea to the height of the model answer.
         // This creates a smoother user experience
-        this.$('.opentextinput__item-textbox').height(this.$('.opentextinput__item-modelanswer').height());
-        this.$('.opentextinput__count-characters').height(this.$('.opentextinput__count-characters').height());
+        this.$textbox.height(this.$modelAnswer.height());
       }
 
-      this.$('.opentextinput__item-modelanswer').addClass('opentextinput__hide-modelanswer');
+      this.$modelAnswer.addClass(HIDE_MODEL_ANSWER_CLASS);
 
       QuestionView.prototype.postRender.call(this);
     }
@@ -186,33 +181,21 @@ define([
 
       this.$textbox.hide();
       this.$countChars.hide();
-      this.$modelAnswer.addClass('opentextinput__show-modelanswer').removeClass('opentextinput__hide-modelanswer');
+      this.$modelAnswer.addClass(SHOW_MODEL_ANSWER_CLASS).removeClass(HIDE_MODEL_ANSWER_CLASS);
 
       this.scrollToTextArea();
     }
 
     hideCorrectAnswer() {
       this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
-
-      if (this.$textbox === undefined) {
-        this.$textbox = this.$('textarea.opentextinput__item-textbox');
-      }
-
-      if (this.$modelAnswer === undefined) {
-        this.$modelAnswer = this.$('.opentextinput__item-modelanswer');
-      }
     }
 
     toggleAnswer(buttonState, buttonKey, answerKey) {
       this.model.set('_buttonState', buttonState);
       this.updateActionButton(buttonKey);
 
-      if (this.$countChars === undefined) {
-        this.$countChars = this.$('.opentextinput__count-characters-container');
-      }
-
       this.$countChars.show();
-      this.$modelAnswer.addClass('opentextinput__hide-modelanswer').removeClass('opentextinput__show-modelanswer');
+      this.$modelAnswer.addClass(HIDE_MODEL_ANSWER_CLASS).removeClass(SHOW_MODEL_ANSWER_CLASS);
     }
 
     scrollToTextArea() {
@@ -252,13 +235,8 @@ define([
      * Used by questionView. Clears the models userAnswer onResetClicked so input appears blank
      */
     resetQuestion() {
-      this.setUserAnswer('');
-
-      if (this.$textbox === undefined) {
-        this.$textbox = this.$('textarea.opentextinput__item-textbox');
-      }
-
-      this.$textbox.val(this.model.getUserAnswer());
+      this.model.setUserAnswer('');
+      this.$textbox.val('');
     }
   };
 
