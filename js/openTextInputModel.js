@@ -28,11 +28,8 @@ define([
 
       this.formatPlaceholder();
 
-      if (!this.getUserAnswer()) {
-        const userAnswer = localUserAnswer;
-        if (userAnswer) {
-          this.setUserAnswer(userAnswer);
-        }
+      if (localUserAnswer) {
+        this.setUserAnswer(localUserAnswer);
       }
 
       let modelAnswer = this.get('modelAnswer');
@@ -40,15 +37,17 @@ define([
 
       this.set('modelAnswer', modelAnswer);
 
+      let _buttonState = BUTTON_STATE.SUBMIT
+
       if (this.get('_isComplete')) {
+        _buttonState =  BUTTON_STATE.CORRECT;
+
         if (this.get('_canShowModelAnswer')) {
-          this.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
-        } else {
-          this.set('_buttonState', BUTTON_STATE.CORRECT);
+          _buttonState = BUTTON_STATE.SHOW_CORRECT_ANSWER;
         }
-      } else {
-        this.set('_buttonState', BUTTON_STATE.SUBMIT);
       }
+
+      this.set('_buttonState', _buttonState);
 
       // Some shim code to handle old/missing JSON.
       const buttons = this.get('_buttons');
@@ -73,8 +72,7 @@ define([
     }
 
     canSubmit() {
-      const answer = this.getUserAnswer()
-      return answer && answer.trim() !== '';
+      return true;
     }
 
     isCorrect() {
