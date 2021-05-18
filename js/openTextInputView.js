@@ -31,7 +31,7 @@ define([
 
     onCompleteChanged(model, isComplete, buttonState) {
       this.$textbox.prop('disabled', isComplete);
-      this.$answer.html(model.getUserAnswer().replace(/\n/g, '<br>'));
+      this.$textbox.html(model.getUserAnswer().replace(/\n/g, '<br>'));
 
       if (!isComplete) return;
 
@@ -162,6 +162,8 @@ define([
     }
 
     postRender() {
+      QuestionView.prototype.postRender.call(this);
+
       if (this.$modelAnswer.height() <= 0) {
         this.$textbox.css('height', 'auto');
         this.$countChars.css('height', 'auto');
@@ -172,8 +174,6 @@ define([
       }
 
       this.$modelAnswer.addClass(HIDE_MODEL_ANSWER_CLASS);
-
-      QuestionView.prototype.postRender.call(this);
     }
 
     showCorrectAnswer() {
@@ -188,19 +188,16 @@ define([
 
     hideCorrectAnswer() {
       this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
-    }
 
-    toggleAnswer(buttonState, buttonKey, answerKey) {
-      this.model.set('_buttonState', buttonState);
-      this.updateActionButton(buttonKey);
 
+      this.$textbox.show();
       this.$countChars.show();
       this.$modelAnswer.addClass(HIDE_MODEL_ANSWER_CLASS).removeClass(SHOW_MODEL_ANSWER_CLASS);
     }
 
     scrollToTextArea() {
-      // Smooth scroll to top of TextArea
-      Adapt.scrollTo(this.$('.opentextinput__widget'), {
+      Adapt.navigateToElement('.' + this.model.get('_id'), {
+        replace: true,
         duration: 400,
         offset: -parseInt($('#wrapper').css('padding-top'))
       });
@@ -236,7 +233,6 @@ define([
      */
     resetQuestion() {
       this.model.setUserAnswer('');
-      this.$textbox.val('');
     }
   };
 
