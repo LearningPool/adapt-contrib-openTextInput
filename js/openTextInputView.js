@@ -29,20 +29,26 @@ define([
       this.model.setupQuestion(localUserAnswer);
     }
 
-    onCompleteChanged(model, isComplete, buttonState) {
+    onCompleteChanged(isComplete, buttonState) {
       this.$textbox.prop('disabled', isComplete);
-      this.$textbox.html(model.getUserAnswer().replace(/\n/g, '<br>'));
+      
+      // on complete change can be called when submitting a correct answer
+      // we need to check if the textbox already has a value before
+      // attempting to prepopulate the answer field with the model user answer
+      if (this.$textbox.html() === '') {
+        this.$textbox.html(this.model.getUserAnswer().replace(/\n/g, '<br>'));
+      }
 
       if (!isComplete) return;
 
-      if (!model.get('_canShowModelAnswer')) return;
+      if (!this.model.get('_canShowModelAnswer')) return;
 
       // Keep the action button enabled so we can show the model answer.
       this.$('.btn__action').a11y_cntrl_enabled(true);
 
       if (_.isEmpty(buttonState)) return;
 
-      let _buttonState = BUTTON_STATE.HIDE_CORRECT_ANSWER
+      let _buttonState = BUTTON_STATE.HIDE_CORRECT_ANSWER;
 
       // Toggle the button.
       if (buttonState == BUTTON_STATE.CORRECT || buttonState == BUTTON_STATE.HIDE_CORRECT_ANSWER || buttonState == BUTTON_STATE.SUBMIT) {
@@ -101,7 +107,7 @@ define([
     }
 
     countCharacters() {
-      const charLengthOfTextarea = this.$textbox.val().length;
+      const charLengthOfTextarea = this.$textbox.text().length;
       const allowedCharacters = this.model.get('_allowedCharacters');
       let charactersLeft = charLengthOfTextarea;
 
@@ -123,14 +129,14 @@ define([
 
     limitCharacters() {
       const allowedCharacters = this.model.get('_allowedCharacters');
-      if (allowedCharacters != null && this.$textbox.val().length > allowedCharacters) {
-        const substringValue = this.$textbox.val().substring(0, allowedCharacters);
-        this.$textbox.val(substringValue);
+      if (allowedCharacters != null && this.$textbox.text().length > allowedCharacters) {
+        const substringValue = this.$textbox.text().substring(0, allowedCharacters);
+        this.$textbox.text(substringValue);
       }
     }
 
     onSubmitted() {
-      const userAnswer = this.$textbox.val();
+      const userAnswer = this.$textbox.text();
       this.model.setUserAnswer(userAnswer);
       this.storeUserAnswer();
     }
@@ -143,7 +149,7 @@ define([
         // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
         // report as being able to support localStorage but fail when setItem() is called.
         try {
-          localStorage.setItem(identifier, this.$textbox.val());
+          localStorage.setItem(identifier, this.$textbox.text());
         } catch (e) {
           console.log('ERROR: HTML5 localStorage.setItem() failed! Unable to save user answer.');
         }
@@ -156,9 +162,8 @@ define([
     }
 
     onActionClicked(buttonState) {
-      if (this.model.get('_isComplete')) {
-        this.onCompleteChanged(this.model, true, buttonState);
-      }
+      if (!this.model.get('_isComplete')) return;
+      this.onCompleteChanged(true, buttonState);
     }
 
     postRender() {
