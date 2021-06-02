@@ -82,8 +82,10 @@ define([
         // Force setting the correct/submitted state.
         this.model.set('_buttonState', BUTTON_STATE.CORRECT);
         this.$('.btn__action').a11y_cntrl_enabled(false);
-        this.$textbox.prop('disabled', true);
       }
+      
+      if (!this.model.get('_isComplete')) return;
+      this.$textbox.prop('disabled', true);
     }
 
     loadLocalAnswer() {
@@ -107,7 +109,7 @@ define([
     }
 
     countCharacters() {
-      const charLengthOfTextarea = this.$textbox.text().length;
+      const charLengthOfTextarea = this.$textbox.val().length;
       const allowedCharacters = this.model.get('_allowedCharacters');
       let charactersLeft = charLengthOfTextarea;
 
@@ -129,14 +131,14 @@ define([
 
     limitCharacters() {
       const allowedCharacters = this.model.get('_allowedCharacters');
-      if (allowedCharacters != null && this.$textbox.text().length > allowedCharacters) {
-        const substringValue = this.$textbox.text().substring(0, allowedCharacters);
-        this.$textbox.text(substringValue);
+      if (allowedCharacters != null && this.$textbox.val().length > allowedCharacters) {
+        const substringValue = this.$textbox.val().substring(0, allowedCharacters);
+        this.$textbox.val(substringValue);
       }
     }
 
     onSubmitted() {
-      const userAnswer = this.$textbox.text();
+      const userAnswer = this.$textbox.val();
       this.model.setUserAnswer(userAnswer);
       this.storeUserAnswer();
     }
@@ -149,7 +151,7 @@ define([
         // Adding a try-catch here as certain browsers, e.g. Safari on iOS in Private mode,
         // report as being able to support localStorage but fail when setItem() is called.
         try {
-          localStorage.setItem(identifier, this.$textbox.text());
+          localStorage.setItem(identifier, this.$textbox.val());
         } catch (e) {
           console.log('ERROR: HTML5 localStorage.setItem() failed! Unable to save user answer.');
         }
@@ -194,10 +196,11 @@ define([
     hideCorrectAnswer() {
       this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
 
-
-      this.$textbox.show();
-      this.$countChars.show();
-      this.$modelAnswer.addClass(HIDE_MODEL_ANSWER_CLASS).removeClass(SHOW_MODEL_ANSWER_CLASS);
+      this.$('textarea.opentextinput__item-textbox').show();
+      this.$('.opentextinput__count-characters-container').show();
+      this.$('.opentextinput__item-modelanswer')
+        .addClass(HIDE_MODEL_ANSWER_CLASS)
+        .removeClass(SHOW_MODEL_ANSWER_CLASS);
     }
 
     scrollToTextArea() {
