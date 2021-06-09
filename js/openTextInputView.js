@@ -29,20 +29,26 @@ define([
       this.model.setupQuestion(localUserAnswer);
     }
 
-    onCompleteChanged(model, isComplete, buttonState) {
+    onCompleteChanged(isComplete, buttonState) {
       this.$textbox.prop('disabled', isComplete);
-      this.$textbox.html(model.getUserAnswer().replace(/\n/g, '<br>'));
+      
+      // on complete change can be called when submitting a correct answer
+      // we need to check if the textbox already has a value before
+      // attempting to prepopulate the answer field with the model user answer
+      if (this.$textbox.html() === '') {
+        this.$textbox.html(this.model.getUserAnswer().replace(/\n/g, '<br>'));
+      }
 
       if (!isComplete) return;
 
-      if (!model.get('_canShowModelAnswer')) return;
+      if (!this.model.get('_canShowModelAnswer')) return;
 
       // Keep the action button enabled so we can show the model answer.
       this.$('.btn__action').a11y_cntrl_enabled(true);
 
       if (_.isEmpty(buttonState)) return;
 
-      let _buttonState = BUTTON_STATE.HIDE_CORRECT_ANSWER
+      let _buttonState = BUTTON_STATE.HIDE_CORRECT_ANSWER;
 
       // Toggle the button.
       if (buttonState == BUTTON_STATE.CORRECT || buttonState == BUTTON_STATE.HIDE_CORRECT_ANSWER || buttonState == BUTTON_STATE.SUBMIT) {
@@ -76,8 +82,10 @@ define([
         // Force setting the correct/submitted state.
         this.model.set('_buttonState', BUTTON_STATE.CORRECT);
         this.$('.btn__action').a11y_cntrl_enabled(false);
-        this.$textbox.prop('disabled', true);
       }
+      
+      if (!this.model.get('_isComplete')) return;
+      this.$textbox.prop('disabled', true);
     }
 
     loadLocalAnswer() {
@@ -156,9 +164,8 @@ define([
     }
 
     onActionClicked(buttonState) {
-      if (this.model.get('_isComplete')) {
-        this.onCompleteChanged(this.model, true, buttonState);
-      }
+      if (!this.model.get('_isComplete')) return;
+      this.onCompleteChanged(true, buttonState);
     }
 
     postRender() {
@@ -189,10 +196,11 @@ define([
     hideCorrectAnswer() {
       this.model.set('_buttonState', BUTTON_STATE.SHOW_CORRECT_ANSWER);
 
-
-      this.$textbox.show();
-      this.$countChars.show();
-      this.$modelAnswer.addClass(HIDE_MODEL_ANSWER_CLASS).removeClass(SHOW_MODEL_ANSWER_CLASS);
+      this.$('textarea.opentextinput__item-textbox').show();
+      this.$('.opentextinput__count-characters-container').show();
+      this.$('.opentextinput__item-modelanswer')
+        .addClass(HIDE_MODEL_ANSWER_CLASS)
+        .removeClass(SHOW_MODEL_ANSWER_CLASS);
     }
 
     scrollToTextArea() {
